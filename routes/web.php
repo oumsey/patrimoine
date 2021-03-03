@@ -15,6 +15,9 @@
     return view('banque.index'); 
 });
  // Partie de la banque
+ Route::get('/', ['uses' => 'HomeController@index', 'as' => 'admin.home']);
+ Route::get('/typerubrique', ['uses' => 'TyperubriqueController@index', 'as' => 'parametres.typerubrique.index']);
+ Route::get('/rubrique', ['uses' => 'RubriqueController@index', 'as' => 'parametres.rubrique.index']);
 Route::patch('/update/{BQE_NUM}', 'BanqueController@update');
 Route::post('/store', 'BanqueController@store'); //la route du formulaire creerbanque
 Route::get('/creer', 'BanqueController@creer');//après @ lenomquivientestlenom dela fonction qui se trouve dans le controler

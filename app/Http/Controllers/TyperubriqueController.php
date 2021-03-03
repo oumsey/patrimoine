@@ -13,11 +13,11 @@ class TyperubriqueController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function indextyperubrique()
+    public function index()
     {
-       $typerubrique=Typerubrique::all();
+       $typerubriques = Typerubrique::all();
 
-       return view('Typerubrique.indextyperubrique', compact('typerubrique'));
+       return view('parametres.typerubrique.index', compact('typerubriques'));
     }
 
     /**
