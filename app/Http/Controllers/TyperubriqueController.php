@@ -16,7 +16,7 @@ class TyperubriqueController extends Controller
     public function index()
     {
        $typerubriques = Typerubrique::all();
-
+      //  dd($typerubriques);
        return view('parametres.typerubrique.index', compact('typerubriques'));
     }
 
@@ -26,9 +26,10 @@ class TyperubriqueController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function creertyperubrique()
+    public function create()
     {
-        return view('Typerubrique.creertyperubrique');
+        //dd("MANCI");
+        return view('parametres.typerubrique.create');
     }
 
     /**

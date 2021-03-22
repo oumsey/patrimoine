@@ -17,6 +17,7 @@
  // Partie de la banque
  Route::get('/', ['uses' => 'HomeController@index', 'as' => 'admin.home']);
  Route::get('/typerubrique', ['uses' => 'TyperubriqueController@index', 'as' => 'parametres.typerubrique.index']);
+ Route::get('/typerubrique/create', ['uses' => 'TyperubriqueController@create', 'as' => 'parametres.typerubrique.create']);
  Route::get('/rubrique', ['uses' => 'RubriqueController@index', 'as' => 'parametres.rubrique.index']);
 Route::patch('/update/{BQE_NUM}', 'BanqueController@update');
 Route::post('/store', 'BanqueController@store'); //la route du formulaire creerbanque

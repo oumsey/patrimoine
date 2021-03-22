@@ -14,14 +14,14 @@ class RubriqueController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function indexrubrique()
+    public function index()
     {
         $rubriques=Rubrique::all();
         foreach ($rubriques as $r) {
             $r->type=Typerubrique::find($r->TRB_NUM);
             //dd($r);
         }
-        return view('Rubrique.indexrubrique', compact('rubriques'));
+        return view('parametres.rubrique.index', compact('rubriques'));
     }
 
     /**

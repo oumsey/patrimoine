@@ -189,9 +189,9 @@
     <script src="{{ asset('plugins/apexchart/apexcharts.min.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
 
-    <!--Morris Chart-->
-    <script src="{{ asset('admin/plugins/morris/morris.min.js') }}"></script>
-    <script src="{{ asset('admin/plugins/raphael/raphael.min.js') }}"></script>
+    <!--Morris Chart
+    <script src="{{ asset('plugins/morris/morris.min.js') }}"></script>
+    <script src="{{ asset('plugins/raphael/raphael.min.js') }}"></script>-->
 
     <!--<script src="{{ asset('admin/pages/dashboard.init.js') }}"></script>
     Data table-->

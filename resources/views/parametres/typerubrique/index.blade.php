@@ -22,7 +22,7 @@
 
                             <div class="col-md-4">
                                 <div class="float-right d-none d-md-block app-datepicker">
-                                <a href="{{ url('/admin/typerubrique/create') }}" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-container="modal-container" >Ajouter une catégorie</a>
+                                <a href="{{ url('/typerubrique/create') }}" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-container="modal-container" >Ajouter une catégorie</a>
                                     <!-- <input type="text" class="form-control" data-date-format="MM dd, yyyy" readonly="readonly" id="datepicker">data-target="#myModal"
                                     <i class="mdi mdi-chevron-down mdi-drop"></i> -->
                                 </div>
