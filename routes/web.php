@@ -15,10 +15,13 @@
     return view('banque.index'); 
 });
  // Partie de la banque
- Route::get('/', ['uses' => 'HomeController@index', 'as' => 'admin.home']);
- Route::get('/typerubrique', ['uses' => 'TyperubriqueController@index', 'as' => 'parametres.typerubrique.index']);
- Route::get('/typerubrique/create', ['uses' => 'TyperubriqueController@create', 'as' => 'parametres.typerubrique.create']);
- Route::get('/rubrique', ['uses' => 'RubriqueController@index', 'as' => 'parametres.rubrique.index']);
+Route::get('/', ['uses' => 'HomeController@index', 'as' => 'admin.home']);
+Route::get('/typerubrique', ['uses' => 'TyperubriqueController@index', 'as' => 'parametres.typerubrique.index']);
+Route::get('/typerubrique/create', ['uses' => 'TyperubriqueController@create', 'as' => 'parametres.typerubrique.create']);
+Route::post('/typerubrique/store', ['uses' => 'TyperubriqueController@store', 'as' => 'parametres.typerubrique.store']);
+Route::get('/typerubrique/{id}/edit', ['uses' => 'TyperubriqueController@edit', 'as' => 'parametres.typerubrique.create']);
+Route::post('/typerubrique/update', ['uses' => 'TyperubriqueController@update', 'as' => 'parametres.typerubrique.update']);
+Route::get('/rubrique', ['uses' => 'RubriqueController@index', 'as' => 'parametres.rubrique.index']);
 Route::patch('/update/{BQE_NUM}', 'BanqueController@update');
 Route::post('/store', 'BanqueController@store'); //la route du formulaire creerbanque
 Route::get('/creer', 'BanqueController@creer');//après @ lenomquivientestlenom dela fonction qui se trouve dans le controler
