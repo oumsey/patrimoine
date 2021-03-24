@@ -97,6 +97,15 @@ class TyperubriqueController extends Controller
        
     }
 
+    public function delete($id)
+    { 
+        $typerubrique = Typerubrique::findOrFail($id); 
+        $typerubrique->delete();
+        //dd($categorie);     
+       // $request->session()->flash('success', 'Modification effectué avec succès');           
+        return redirect()->route('parametres.typerubrique.index');
+    }
+
     /**
      * Display the specified resource.
      *

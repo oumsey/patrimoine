@@ -20,6 +20,34 @@ function deleteItemold(url,redirectUrl){
     });
 } 
 function deleteItem(id, url, redirectUrl) {
+    alert(id);  
+        
+        $.ajax({
+            url: url,
+            data: {
+                "id": id
+            },
+            type: "GET"
+        })
+            .done(function (data) {
+               
+                        window.location.href = redirectUrl;
+                   
+            })
+            .error(function (data) {
+                var text = "";
+                try {
+                    var json = JSON.parse(data.responseText);
+                    text = json.responseText;
+                } catch (e) {
+                    text = "Une erreur est survenue, suppressions impossible!";
+                   
+                }
+                
+            });
+   
+}
+function deleteItemOLD1(id, url, redirectUrl) {
     alert(id);
     swal({
         title: "Êtes vous sûr?",

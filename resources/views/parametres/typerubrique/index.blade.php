@@ -57,7 +57,7 @@
                                                 <td><a href="<?php echo url("typerubrique/$typerubrique->TRB_NUM/edit") ?>"  data-toggle="modal" data-container="modal-container"  class="waves-effect waves-light"><i class="typcn typcn-pencil text-success"></i></a>
                                                 &nbsp;  | &nbsp;
                                                 <a href ="#" data-toggle="tooltip" title="Supprimer!"
-                                                                        onclick="deleteItem('{{ $typerubrique->TRB_NUM }}','<?= url("admin/typerubrique/delete/$typerubrique->TRB_NUM") ?>','<?= url("/admin/typerubrique") ?>')">
+                                                                        onclick="deleteItem('<?= $typerubrique->TRB_NUM ?>','<?= url("/typerubrique/delete/$typerubrique->TRB_NUM") ?>','<?= url("/typerubrique") ?>')">
                                                     <i class="typcn typcn-trash text-danger "></i>
                                                 </a>
                                             </td>                                             

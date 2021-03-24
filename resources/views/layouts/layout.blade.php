@@ -210,8 +210,8 @@
     <script type="text/javascript" src="{{ asset('plugins/notifications/pnotify.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('pages/components_notifications_pnotify.js') }}"></script>
     <!-- PNotify !-->
-     <!-- <script src="{{ asset('admin/plugins/pages/sweet-alert.init.js') }}"></script>  
-     App js -->
+     <script src="{{ asset('admin/plugins/pages/sweet-alert.init.js') }}"></script>  
+    <!--  App js -->
      <script src="{{ asset('js/app.js') }}"></script>
     <?php if(!empty(Session::has('success'))):?>
     <script type="text/javascript">        
