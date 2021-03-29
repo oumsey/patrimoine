@@ -4,6 +4,32 @@
  Website: www.themesdesign.in
  File: Sweet Alert init js
  */
+$('#sa-params').click(function () {           
+    swal({
+        title: 'Êtes vous sûr?',
+        text: "Voulez vous supprimer cet enregistrement?",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Oui',
+        cancelButtonText: 'Non',
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger ml-2',
+        buttonsStyling: false
+    }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        //console.log(result);
+        if (result.value) {
+            swal(
+                'Supprimer!',
+                'supprimer avec succès MAN.',
+                'success'
+            )
+        } else if (result.dismiss) {
+          //swal('Changes are not saved', '', 'info')
+        }
+        window.location.href = redirectUrl;
+      })
+});
 
 !function ($) {
     "use strict";
@@ -62,35 +88,31 @@
         });
 
         //Parameter
-        $('#sa-params').click(function () {
-            var dismiss = 'cancel';
+        $('#sa-params1').click(function () {           
             swal({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: 'Êtes vous sûr?',
+                text: "Voulez vous supprimer cet enregistrement?",
                 type: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Non',
                 confirmButtonClass: 'btn btn-success',
                 cancelButtonClass: 'btn btn-danger ml-2',
                 buttonsStyling: false
-            }).then(function () {
-                swal(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                )
-            }, function (dismiss) {
-                // dismiss can be 'cancel', 'overlay',
-                // 'close', and 'timer'
-                if (dismiss === 'cancel') {
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                //console.log(result);
+                if (result.value) {
                     swal(
-                        'Cancelled',
-                        'Your imaginary file is safe :)',
-                        'error'
+                        'Supprimer!',
+                        'supprimer avec succès.',
+                        'success'
                     )
+                } else if (result.dismiss) {
+                  //swal('Changes are not saved', '', 'info')
                 }
-            })
+                window.location.href = redirectUrl;
+              })
         });
 
         //Custom Image
@@ -236,8 +258,8 @@
 
 
     },
-        //init
-        $.SweetAlert = new SweetAlert, $.SweetAlert.Constructor = SweetAlert
+    //init
+    $.SweetAlert = new SweetAlert, $.SweetAlert.Constructor = SweetAlert
 }(window.jQuery),
 
 //initializing

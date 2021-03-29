@@ -106,6 +106,18 @@ class TyperubriqueController extends Controller
         return redirect()->route('parametres.typerubrique.index');
     }
 
+    public function deletes(Request $request)
+    {   $input = $request->all(); 
+        $d = $input["d"];
+        //dd($d);
+        if(!empty($d)) {
+            foreach ($d as $id) {
+                $typerubrique = Typerubrique::findOrFail($id); 
+                $typerubrique->delete();
+            }
+        }                  
+        return redirect()->route('parametres.typerubrique.index');
+    }
     /**
      * Display the specified resource.
      *

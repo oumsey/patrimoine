@@ -1,51 +1,111 @@
-function deleteItemold(url,redirectUrl){
-    event.preventDefault();
-
-        swal({
-            title: "Voulez vous vraiment supprimer cet enregistrement ?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-            if (willDelete) {
-                $.get(url , { });//code : code, agence : agence 
-                swal("supprimer avec succès", {
-                    icon: "success",
-                });
-                window.location.href = redirectUrl;
-            } else {
-                
-    }
-    });
-} 
+ 
 function deleteItem(id, url, redirectUrl) {
-    alert(id);  
-        
-        $.ajax({
-            url: url,
-            data: {
-                "id": id
-            },
-            type: "GET"
-        })
-            .done(function (data) {
-               
-                        window.location.href = redirectUrl;
-                   
+   // alert(id);  
+    swal({
+        title: 'Êtes vous sûr?',
+        text: "Voulez vous supprimer cet enregistrement?",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Oui',
+        cancelButtonText: 'Non',
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger ml-2',
+        buttonsStyling: false
+    }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        //console.log(result);
+        if (result.value) {
+            $.ajax({
+                url: url,
+                data: {
+                    "id": id
+                },
+                type: "GET"
             })
-            .error(function (data) {
-                var text = "";
-                try {
-                    var json = JSON.parse(data.responseText);
-                    text = json.responseText;
-                } catch (e) {
-                    text = "Une erreur est survenue, suppressions impossible!";
-                   
+                .done(function (data) {
+                    swal(
+                        'Supprimer!',
+                        'supprimer avec succès.',
+                        'success'
+                    );
+                    window.location.href = redirectUrl;                       
+                })
+                .error(function (data) {
+                    var text = "";
+                    try {
+                        var json = JSON.parse(data.responseText);
+                        text = json.responseText;
+                    } catch (e) {
+                        text = "Une erreur est survenue, suppressions impossible!";
+                       
+                    }
+                    
+                });
+            
+        } else if (result.dismiss) {
+          //swal('Changes are not saved', '', 'info')
+         // window.location.href = redirectUrl;
+        }
+        
+      })
+       
+   
+}
+function deleteItems(url, redirectUrl)
+{
+    if ($('.my_checkbox:checked').length != 0 )
+    {
+
+            var donnees = new Array();
+            $("input:checked").each(function () {
+                donnees.push($(this).attr("id"));
+            });
+            swal({
+                title: "Êtes vous sûr?",
+                text: "Voulez vous supprimer ces enregistrements ?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Non',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger ml-2',
+                buttonsStyling: false
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                //console.log(result);
+                if (result.value) {
+                    $.ajax({
+                        url: url,
+                        data: {d:donnees},
+                        type: "GET"
+                    })
+                        .done(function (data) {
+                            swal(
+                                'Suppressions!',
+                                'Suppressions effectuée avec succès!',
+                                'success'
+                            );
+                            window.location.href = redirectUrl;                       
+                        })
+                        .error(function (data) {
+                            var text = "";
+                            try {
+                                var json = JSON.parse(data.responseText);
+                                text = json.responseText;
+                            } catch (e) {
+                                text = "Une erreur est survenue, suppressions impossible!";
+                               
+                            }
+                            
+                        });
+                    
+                } else if (result.dismiss) {
+                  //swal('Changes are not saved', '', 'info')
+                 // window.location.href = redirectUrl;
                 }
                 
-            });
-   
+              })
+    }
 }
 function deleteItemOLD1(id, url, redirectUrl) {
     alert(id);
@@ -97,6 +157,7 @@ function deleteItemOLD1(id, url, redirectUrl) {
             });
     });
 }
+
 function Fenced(id, url, redirectUrl) {
     swal({
             title: "Êtes vous sûr?",
@@ -156,7 +217,7 @@ function Fenced(id, url, redirectUrl) {
                 });
         });
 }
-function deleteItems(url, redirectUrl)
+function deleteItems1(url, redirectUrl)
 {
     if ($('.my_checkbox:checked').length != 0 )
     {
@@ -214,7 +275,7 @@ function deleteItems(url, redirectUrl)
 function save( url,form )
 {
     event.preventDefault();
-    alert(url);
+    //alert(url);
     if(typeof(form) == 'undefined'){
         form = 'form';
     }

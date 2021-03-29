@@ -4,7 +4,21 @@
  Website: www.themesdesign.in
  File: Main js
  */
+$("#select_all").change(function(){
+    $(".my_checkbox").prop('checked', $(this).prop("checked"));
+});
 
+$('.my_checkbox').change(function(){
+
+    if(false == $(this).prop("checked")){
+        $("#select_all").prop('checked', false);
+
+    }
+
+    if ($('.my_checkbox:checked').length == $('.my_checkbox').length ){
+        $("#select_all").prop('checked', true);
+    }
+});
 
 !function($) {
     "use strict";

@@ -1,10 +1,10 @@
 <! DOCTYPE html>
-<html lang ="en">
+<html lang ="fr">
 <head>
   <meta charset ="UTF-8">
   <meta name ="viewport" content ="width =device-width, initial-scale = 1.0">
   <meta http-equiv ="X-UA-Compatible" content ="ie = edge">
-  <title> GESTION DU  PATRIMOINE de Laravel 5.7 </title>
+  <title> GESTION DU  PATRIMOINE </title>
 
   <link rel="shortcut icon" href="assets/images/favicon.ico">
  
@@ -34,8 +34,9 @@
             <!-- LOGO -->
             <div class="topbar-left">
                 <a href="index.html" class="logo">
-                    <img src="admin/images/logo-light.png" class="logo-lg" alt="" height="22">
-                    <img src="admin/images/logo-sm.png" class="logo-sm" alt="" height="24">
+                    PATRIMOINE
+                    <!-- <img src="images/logo-light.png" class="logo-lg" alt="" height="22">
+                    <img src="images/logo-sm.png" class="logo-sm" alt="" height="24"> -->
                 </a>
             </div>
 
@@ -61,14 +62,14 @@
                     <!-- language-->
                     <li class="dropdown notification-list list-inline-item d-none d-md-inline-block">
                         <a class="nav-link dropdown-toggle arrow-none waves-effect" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                            <img src="admin/images/flags/us_flag.jpg" class="mr-2" height="12" alt="" /> English <span class="mdi mdi-chevron-down"></span>
+                            <img src="images/flags/us_flag.jpg" class="mr-2" height="12" alt="" /> English <span class="mdi mdi-chevron-down"></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated language-switch">
-                            <a class="dropdown-item" href="#"><img src="admin/images/flags/french_flag.jpg" alt="" height="16" /><span> French </span></a>
-                            <a class="dropdown-item" href="#"><img src="admin/images/flags/spain_flag.jpg" alt="" height="16" /><span> Spanish </span></a>
-                            <a class="dropdown-item" href="#"><img src="admin/images/flags/russia_flag.jpg" alt="" height="16" /><span> Russian </span></a>
-                            <a class="dropdown-item" href="#"><img src="admin/images/flags/germany_flag.jpg" alt="" height="16" /><span> German </span></a>
-                            <a class="dropdown-item" href="#"><img src="admin/images/flags/italy_flag.jpg" alt="" height="16" /><span> Italian </span></a>
+                            <a class="dropdown-item" href="#"><img src="images/flags/french_flag.jpg" alt="" height="16" /><span> French </span></a>
+                            <a class="dropdown-item" href="#"><img src="images/flags/spain_flag.jpg" alt="" height="16" /><span> Spanish </span></a>
+                            <a class="dropdown-item" href="#"><img src="images/flags/russia_flag.jpg" alt="" height="16" /><span> Russian </span></a>
+                            <a class="dropdown-item" href="#"><img src="images/flags/germany_flag.jpg" alt="" height="16" /><span> German </span></a>
+                            <a class="dropdown-item" href="#"><img src="images/flags/italy_flag.jpg" alt="" height="16" /><span> Italian </span></a>
                         </div>
                     </li>
 
@@ -132,7 +133,7 @@
                     <li class="dropdown notification-list list-inline-item">
                         <div class="dropdown notification-list nav-pro-img">
                             <a class="dropdown-toggle nav-link arrow-none waves-effect nav-user" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                                <img src="admin/images/users/user-1.jpg" alt="user" class="rounded-circle">
+                                <img src="images/users/user-1.jpg" alt="user" class="rounded-circle">
                             </a>
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated profile-dropdown">
                                 <!-- item-->
@@ -169,7 +170,7 @@
             <!-- content -->
 
             <footer class="footer">
-                © 2019 Zegva <span class="d-none d-sm-inline-block"> - Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesdesign</span>.
+                © 2021 Patrimoine <span class="d-none d-sm-inline-block"> - Crée par<i class="mdi mdi-heart text-danger"></i> ZivFinances</span>.
             </footer>
 
         </div>
@@ -194,13 +195,15 @@
     <script src="{{ asset('plugins/morris/morris.min.js') }}"></script>
     <script src="{{ asset('plugins/raphael/raphael.min.js') }}"></script>-->
 
-    <!--<script src="{{ asset('admin/pages/dashboard.init.js') }}"></script>
+    <!--<script src="{{ asset('pages/dashboard.init.js') }}"></script>
     Data table-->
     <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>   
     <!-- Responsive examples -->
     <script src="{{ asset('plugins/datatables/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables/buttons.bootstrap4.min.js') }}"></script>
     <!-- Datatable init js -->
     <script src="{{ asset('pages/datatables.init.js') }}"></script>
      <!-- alertify js -->
@@ -264,6 +267,15 @@ $(document).ready(function(){
 
 		});
     });
+    // function placeFooter() {
+    //     if( $(document.body).height() < $(window).height() ) {
+    //         $("footer").css({position: "fixed", bottom:"0px"});
+    //     } else {
+    //         $("footer").css({position: ""});
+    //     }
+    // }
+
+    // placeFooter();
 </script>
 </body>
 </html>
