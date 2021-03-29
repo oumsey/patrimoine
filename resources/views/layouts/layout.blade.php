@@ -5,10 +5,11 @@
   <meta name ="viewport" content ="width =device-width, initial-scale = 1.0">
   <meta http-equiv ="X-UA-Compatible" content ="ie = edge">
   <title> GESTION DU  PATRIMOINE de Laravel 5.7 </title>
-  <link href ="{{asset('css/app.css')}}" rel ="stylesheet" type ="text/css"/>
+
   <link rel="shortcut icon" href="assets/images/favicon.ico">
  
-    <link href="{{ asset('plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet">    
+    <link href="{{ asset('plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet">   
+    <link href ="{{asset('plugins/sweet-alert2/sweetalert2.css')}}" rel ="stylesheet" type ="text/css"/> 
     <!-- DataTables -->
     <link href="{{ asset('plugins/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('plugins/datatables/buttons.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
@@ -205,12 +206,13 @@
      <!-- alertify js -->
      <script src="{{ asset('plugins/alertify/js/alertify.js') }}"></script>
       <!-- sweet-alertif js -->
-      <script src="{{ asset('plugins/notifications/sweet_alert.min.js') }}"></script>
+      <!-- <script src="{{ asset('plugins/notifications/sweet_alert.min.js') }}"></script> -->
 
     <script type="text/javascript" src="{{ asset('plugins/notifications/pnotify.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('pages/components_notifications_pnotify.js') }}"></script>
     <!-- PNotify !-->
-     <script src="{{ asset('admin/plugins/pages/sweet-alert.init.js') }}"></script>  
+    <script src="{{ asset('plugins/sweet-alert2/sweetalert2.min.js') }}"></script>
+     <script src="{{ asset('pages/sweet-alert.init.js') }}"></script>  
     <!--  App js -->
      <script src="{{ asset('js/app.js') }}"></script>
     <?php if(!empty(Session::has('success'))):?>

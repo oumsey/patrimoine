@@ -53,16 +53,17 @@
                 cancelButtonClass: 'btn btn-danger ml-2',
                 confirmButtonText: 'Yes, delete it!'
             }).then(function () {
-                swal(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                )
+                // swal(
+                //     'Deleted!',
+                //     'Your file has been deleted.',
+                //     'success'
+                // )
             })
         });
 
         //Parameter
         $('#sa-params').click(function () {
+            var dismiss = 'cancel';
             swal({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",

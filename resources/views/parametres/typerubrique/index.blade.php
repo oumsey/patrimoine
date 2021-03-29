@@ -22,6 +22,10 @@
 
                             <div class="col-md-4">
                                 <div class="float-right d-none d-md-block app-datepicker">
+                                <div class="col-sm-6 col-md-4 col-xl-3 mb-4">
+                                            <p class="text-muted">A warning message, with a function attached to the "Confirm"-button...</p>
+                                            <button type="button" class="btn btn-primary waves-effect waves-light" id="sa-params">Click me</button>
+                                        </div>
                                 <a href="{{ url('/typerubrique/create') }}" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-container="modal-container" >Ajouter une catégorie</a>
                                     <!-- <input type="text" class="form-control" data-date-format="MM dd, yyyy" readonly="readonly" id="datepicker">data-target="#myModal"
                                     <i class="mdi mdi-chevron-down mdi-drop"></i> -->
