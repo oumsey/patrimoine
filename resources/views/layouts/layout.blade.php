@@ -169,9 +169,9 @@
             </div>
             <!-- content -->
 
-            <footer class="footer">
+            <!-- <footer class="footer">
                 © 2021 Patrimoine <span class="d-none d-sm-inline-block"> - Crée par<i class="mdi mdi-heart text-danger"></i> ZivFinances</span>.
-            </footer>
+            </footer> -->
 
         </div>
          <!-- ============================================================== -->
@@ -187,8 +187,8 @@
     <script src="{{ asset('js/metismenu.min.js') }}"></script>
     <script src="{{ asset('js/jquery.slimscroll.js') }}"></script>
     <script src="{{ asset('js/waves.min.js') }}"></script>
-
-    <script src="{{ asset('plugins/apexchart/apexcharts.min.js') }}"></script>
+    <!-- GRAPH -->
+    <!-- <script src="{{ asset('plugins/apexchart/apexcharts.min.js') }}"></script> -->
     <script src="{{ asset('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
 
     <!--Morris Chart
