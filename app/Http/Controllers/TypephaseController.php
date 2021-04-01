@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Typephase;
+use App\Http\Controllers\PDOException;
 
 class TypephaseController extends Controller
 {
@@ -13,11 +14,11 @@ class TypephaseController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function indextypephase()
+    public function index()
     {
-       $typephase=Typephase::all();
-
-       return view('Typephase.indextypephase', compact('typephase'));
+       $typephases = Typephase::all();
+      //  dd($typerubriques);
+       return view('parametres.typephase.index', compact('typephases'));
     }
 
     /**
@@ -26,9 +27,17 @@ class TypephaseController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function creertypephase()
+    public function create()
     {
-        return view('Typephase.creertypephase');
+        //dd("MANCI");
+        return view('parametres.typephase.create');
+    }
+
+    public function edit($id)
+    { 
+        $typephase = Typephase::findOrFail($id); 
+       // dd($categorie);     
+        return view('parametres.typephase.create')->with('typephase', $typephase);
     }
 
     /**
@@ -38,75 +47,68 @@ class TypephaseController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function storetypephase(Request $request)
+    public function store(Request $request)
     {
-        $request->validate([
-        'TPH_LIB'=>'required'
-    ]);
-      $typephase=new Typephase([
-       'TPH_LIB' => $request->get('TPH_LIB')
-      ]);
-       $typephase->save();
-       return redirect('/creertypephase')->with('success', 'Stock has been added');
+       try { 
+        $input = $request->all();     
+        $typephase = Typephase::create($input);        
+       if ($request->ajax() || $request->is('api/*')) {
+           return response()->json(['success'=>'Got Simple Ajax Request.']);            
+       } else {            
+           $request->session()->flash('success', 'Enregistrement effectué avec succès');           
+           return redirect()->route('parametres.typephase.index');
+       }
+       }catch(PDOException $exception) {
+//            DB::rollBack();
+           if ($request->ajax()) {
+               return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+           } else {
+               return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+           }
+       }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function show()
-    {
-
+    public function update(Request $request)
+    {   
+      try { 
+            $input = $request->all();             
+            $typephase = Typephase::findOrFail($input["TPH_NUM"]);
+            $input = $request->all();
+            $typephase->fill($input);
+            $typephase->update();                
+            $request->session()->flash('success', 'Modification effectué avec succès');           
+            return redirect()->route('parametres.typephase.index');
+       
+        }catch(PDOException $exception) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+            } else {
+                return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+            }
+        }
+       
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function affichertypephase($TPH_NUM)
-    {
-     $typephase= Typephase::find($TPH_NUM);
-        return view('Typephase.affichertypephase', compact('typephase'));
+    public function delete($id)
+    { 
+        $typephase = Typephase::findOrFail($id); 
+        $typephase->delete();
+        //dd($categorie);     
+       // $request->session()->flash('success', 'Modification effectué avec succès');           
+        return redirect()->route('parametres.typephase.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function updatetypephase(Request $request,$TPH_NUM)
-      { $request->validate([
-        'TPH_LIB'=>'required'
-    ]);
-
-      $typephase= Typephase::find($TPH_NUM);
-      $typephase->TPH_LIB = $request->get('TPH_LIB');
-      $typephase->save();
-
-      return redirect('/indextypephase')->with('success', 'la modification a été un succès ');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function destroytypephase($TPH_NUM)
-    {
-     $typephase = Typephase::find($TPH_NUM);
-     $typephase->delete();
-
-     return redirect('/indextypephase')->with('success', 'Stock has been deleted Successfully');
+    public function deletes(Request $request)
+    {   //dd($request);
+        $input = $request->all(); 
+        $d = $input["d"];
+        //dd($d);
+        if(!empty($d)) {
+            foreach ($d as $id) {
+                $typephase = Typephase::findOrFail($id); 
+                $typephase->delete();
+            }
+        }                  
+        return redirect()->route('parametres.typephase.index');
     }
 }

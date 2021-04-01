@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Typeprojet;
+use App\Http\Controllers\PDOException;
 
 class TypeprojetController extends Controller
 {
@@ -13,11 +14,11 @@ class TypeprojetController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function indextypeprojet()
+    public function index()
     {
-       $typeprojet=Typeprojet::all();
-
-       return view('Typeprojet.indextypeprojet', compact('typeprojet'));
+       $typeprojets = Typeprojet::all();
+      //  dd($typerubriques);
+       return view('parametres.typeprojet.index', compact('typeprojets'));
     }
 
     /**
@@ -26,9 +27,17 @@ class TypeprojetController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function creertypeprojet()
+    public function create()
     {
-        return view('Typeprojet.creertypeprojet');
+        //dd("MANCI");
+        return view('parametres.typeprojet.create');
+    }
+
+    public function edit($id)
+    { 
+        $typeprojet = Typeprojet::findOrFail($id); 
+       // dd($categorie);     
+        return view('parametres.typeprojet.create')->with('typeprojet', $typeprojet);
     }
 
     /**
@@ -38,75 +47,68 @@ class TypeprojetController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function storetypeprojet(Request $request)
+    public function store(Request $request)
     {
-        $request->validate([
-        'TPJ_LIB'=>'required'
-    ]);
-      $typeprojet=new Typeprojet([
-       'TPJ_LIB' => $request->get('TPJ_LIB')
-      ]);
-       $typeprojet->save();
-       return redirect('/creertypeprojet')->with('success', 'Stock has been added');
+       try { 
+        $input = $request->all();     
+        $typeprojet = Typeprojet::create($input);        
+       if ($request->ajax() || $request->is('api/*')) {
+           return response()->json(['success'=>'Got Simple Ajax Request.']);            
+       } else {            
+           $request->session()->flash('success', 'Enregistrement effectué avec succès');           
+           return redirect()->route('parametres.typeprojet.index');
+       }
+       }catch(PDOException $exception) {
+//            DB::rollBack();
+           if ($request->ajax()) {
+               return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+           } else {
+               return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+           }
+       }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function show()
-    {
-
+    public function update(Request $request)
+    {   
+      try { 
+            $input = $request->all();             
+            $typeprojet = Typeprojet::findOrFail($input["TPJ_NUM"]);
+            $input = $request->all();
+            $typeprojet->fill($input);
+            $typeprojet->update();                
+            $request->session()->flash('success', 'Modification effectué avec succès');           
+            return redirect()->route('parametres.typeprojet.index');
+       
+        }catch(PDOException $exception) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+            } else {
+                return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+            }
+        }
+       
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function affichertypeprojet($TPJ_NUM)
-    {
-     $typeprojet= Typeprojet::find($TPJ_NUM);
-        return view('Typeprojet.affichertypeprojet', compact('typeprojet'));
+    public function delete($id)
+    { 
+        $typeprojet= Typeprojet::findOrFail($id); 
+        $typeprojet->delete();
+        //dd($categorie);     
+       // $request->session()->flash('success', 'Modification effectué avec succès');           
+        return redirect()->route('parametres.typeprojet.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function updatetypeprojet(Request $request,$TPJ_NUM)
-      { $request->validate([
-        'TPJ_LIB'=>'required'
-    ]);
-
-      $typeprojet= Typeprojet::find($TPJ_NUM);
-      $typeprojet->TPJ_LIB = $request->get('TPJ_LIB');
-      $typeprojet->save();
-
-      return redirect('/indextypeprojet')->with('success', 'la modification a été un succès ');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function destroytypeprojet($TPJ_NUM)
-    {
-     $typeprojet = Typeprojet::find($TPJ_NUM);
-     $typeprojet->delete();
-
-     return redirect('/indextypeprojet')->with('success', 'Stock has been deleted Successfully');
+    public function deletes(Request $request)
+    {   //dd($request);
+        $input = $request->all(); 
+        $d = $input["d"];
+        //dd($d);
+        if(!empty($d)) {
+            foreach ($d as $id) {
+                $typeprojet = Typeprojet::findOrFail($id); 
+                $typeprojet->delete();
+            }
+        }                  
+        return redirect()->route('parametres.typeprojet.index');
     }
 }

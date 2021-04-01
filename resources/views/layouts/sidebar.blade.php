@@ -50,8 +50,11 @@
                         <li>
                             <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-briefcase"></i> <span> Paramètres <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span> </a>
                             <ul class="submenu">
+                                <li><a href="{{ url('/agencebancaire') }}">Agence Bancaire</a></li>
+                                <li><a href="{{ url('/banque') }}">Banque</a></li>
+                                 <li><a href="{{ url('/typephase') }}">Type de Phases</a></li>
                                 <li><a href="{{ url('/typerubrique') }}">Type de rubriques</a></li>
-                                <li><a href="{{ url("/rubrique") }}">Rubriques</a></li>
+                                <li><a href="{{ url('/rubrique') }}">Rubriques</a></li>
                                 <li><a href="ui-buttons.html">Produits</a></li>
                                 <li><a href="ui-cards.html">Cards</a></li>
                                 <li><a href="ui-dropdowns.html">Dropdowns</a></li>

@@ -1,4 +1,4 @@
- 
+
 function deleteItem(id, url, redirectUrl) {
    // alert(id);  
     swal({

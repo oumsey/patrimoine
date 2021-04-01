@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Http\Request;
 use App\Model\Banque;
-
+use App\Http\Controllers\PDOException;
 
 class BanqueController extends Controller
 {
-    /**
+      /**
      * Display a listing of the resource.
      *
      * @param  \App\lain  $lain
@@ -17,9 +16,9 @@ class BanqueController extends Controller
      */
     public function index()
     {
-       $banques=Banque::all();
-
-        return view('Banque.index', compact('banques'));
+       $banques = Banque::all();
+      //  dd($typerubriques);
+       return view('parametres.banque.index', compact('banques'));
     }
 
     /**
@@ -28,9 +27,17 @@ class BanqueController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function creer()
+    public function create()
     {
-        return view('Banque.creer');
+        //dd("MANCI");
+        return view('parametres.banque.create');
+    }
+
+    public function edit($id)
+    { 
+        $banque = Banque::findOrFail($id); 
+       // dd($categorie);     
+        return view('parametres.banque.create')->with('banque', $banque);
     }
 
     /**
@@ -42,83 +49,66 @@ class BanqueController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-        'BQE_NOM'=>'required',
-        'BQE_SIGLE'=> 'required',
-        'BQE_TEL' => 'required'
-    ]);
-      $banque=new Banque([
-       'BQE_NOM' => $request->get('BQE_NOM'),
-       'BQE_SIGLE'=> $request->get('BQE_SIGLE'),
-       'BQE_TEL'=> $request->get('BQE_TEL')
-      ]);
-       $banque->save();
-       return redirect('/creer')->with('success', 'Stock has been added');
+       try { 
+        $input = $request->all();     
+        $banque = Banque::create($input);        
+       if ($request->ajax() || $request->is('api/*')) {
+           return response()->json(['success'=>'Got Simple Ajax Request.']);            
+       } else {            
+           $request->session()->flash('success', 'Enregistrement effectué avec succès');           
+           return redirect()->route('parametres.banque.index');
+       }
+       }catch(PDOException $exception) {
+//            DB::rollBack();
+           if ($request->ajax()) {
+               return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+           } else {
+               return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+           }
+       }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function show($BQE_NUM)
-    {
-        $banque=Banque::find($BQE_NUM);
-        return view('/index', compact('banque'));
+    public function update(Request $request)
+    {   
+      try { 
+            $input = $request->all();             
+            $banque = Banque::findOrFail($input["BQE_NUM"]);
+            $input = $request->all();
+            $banque->fill($input);
+            $banque->update();                
+            $request->session()->flash('success', 'Modification effectué avec succès');           
+            return redirect()->route('parametres.banque.index');
+       
+        }catch(PDOException $exception) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+            } else {
+                return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+            }
+        }
+       
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function afficher($BQE_NUM)
-    {
-        $banque= Banque::find($BQE_NUM);
-        return view('Banque.afficher', compact('banque'));
+    public function delete($id)
+    { 
+        $banque = Banque::findOrFail($id); 
+        $banque->delete();
+        //dd($categorie);     
+       // $request->session()->flash('success', 'Modification effectué avec succès');           
+        return redirect()->route('parametres.banque.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $BQE_NUM)
-    {
-        $request->validate([
-        'BQE_NOM'=>'required',
-        'BQE_SIGLE'=> 'required',
-        'BQE_TEL' => 'required'
-    ]);
-
-      $banque = Banque::find($BQE_NUM);
-      $banque->BQE_NOM = $request->get('BQE_NOM');
-      $banque->BQE_SIGLE = $request->get('BQE_SIGLE');
-      $banque->BQE_TEL = $request->get('BQE_TEL');
-      $banque->save();
-
-      return redirect('/creer')->with('success', 'Stock has been ');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($BQE_NUM)
-    {
-     $banque = Banque::find($BQE_NUM);
-     $banque->delete();
-
-     return redirect('/index')->with('success', 'Stock has been deleted Successfully');
+    public function deletes(Request $request)
+    {   //dd($request);
+        $input = $request->all(); 
+        $d = $input["d"];
+        //dd($d);
+        if(!empty($d)) {
+            foreach ($d as $id) {
+                $banque = Banque::findOrFail($id); 
+                $banque->delete();
+            }
+        }                  
+        return redirect()->route('parametres.banque.index');
     }
 }

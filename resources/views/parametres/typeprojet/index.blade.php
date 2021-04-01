@@ -7,12 +7,12 @@
                         <div class="row align-items-center ">
                             <div class="col-md-8">
                                 <div class="page-title-box">
-                                    <h4 class="page-title">Liste des types de rubrique</h4>
+                                    <h4 class="page-title">Liste des types de projets</h4>
                                     <ol class="breadcrumb">                                        
                                         <li class="breadcrumb-item">
                                             <a href="javascript:void(0);">Paramètres</a>
                                         </li>
-                                        <li class="breadcrumb-item active">Liste des types rubrique</li>
+                                        <li class="breadcrumb-item active">Liste des types de projets</li>
                                     </ol>
                                 </div>
                             </div>
@@ -23,7 +23,7 @@
                                             <p class="text-muted">A warning message, with a function attached to the "Confirm"-button...</p>
                                             <button type="button" class="btn btn-primary waves-effect waves-light" id="sa-params">Click me</button>
                                         </div> -->
-                                <a href="{{ url('/typerubrique/create') }}" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-container="modal-container" >Ajouter un type de rubrique</a>
+                                <a href="{{ url('/typeprojet/create') }}" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-container="modal-container" >Ajouter un type de projet</a>
                                     <!-- <input type="text" class="form-control" data-date-format="MM dd, yyyy" readonly="readonly" id="datepicker">data-target="#myModal"
                                     <i class="mdi mdi-chevron-down mdi-drop"></i> -->
                                 </div>
@@ -52,14 +52,14 @@
                                         </thead>
 
                                         <tbody>
-                                        <?php foreach ($typerubriques as $typerubrique) : ?>
-                                            <tr><td><input class="my_checkbox" type="checkbox" name="check[]" id="<?php echo $typerubrique->TRB_NUM ?>" > </td>
-                                                <td>{{$typerubrique->TRB_NUM}}</td>
-                                                <td>{{$typerubrique->TRB_LIB}}</td>  
-                                                <td><a href="<?php echo url("typerubrique/$typerubrique->TRB_NUM/edit") ?>"  data-toggle="modal" data-container="modal-container"  class="waves-effect waves-light"><i class="typcn typcn-pencil text-success"></i></a>
+                                        <?php foreach ($typeprojets as $typepro) : ?>
+                                            <tr><td><input class="my_checkbox" type="checkbox" name="check[]" id="<?php echo $typepro->TPH_NUM ?>" > </td>
+                                                <td>{{$typepro->TPJ_NUM}}</td>
+                                                <td>{{$typepro->TPJ_LIB}}</td>  
+                                                <td><a href="<?php echo url("typeprojet/$typepro->TPJ_NUM/edit") ?>"  data-toggle="modal" data-container="modal-container"  class="waves-effect waves-light"><i class="typcn typcn-pencil text-success"></i></a>
                                                 &nbsp;  | &nbsp;
                                                 <a href ="#" data-toggle="tooltip" title="Supprimer!"
-                                                                        onclick="deleteItem('<?= $typerubrique->TRB_NUM ?>','<?= url("/typerubrique/delete/$typerubrique->TRB_NUM") ?>','<?= url("/typerubrique") ?>')">
+                                                                        onclick="deleteItem('<?= $typepro->TPJ_NUM ?>','<?= url("/typeprojet/delete/$typepro->TPJ_NUM") ?>','<?= url("/typeprojet") ?>')">
                                                     <i class="typcn typcn-trash text-danger "></i>
                                                 </a>
                                             </td>                                             
@@ -69,7 +69,7 @@
                                         <tfooter>
                                             <tr >
                                                 <th colspan="5">
-                                                    <button type="button" onclick="deleteItems('<?= url("/typerubrique/deletes") ?>', '<?= url("/typerubrique") ?>')" class="btn btn-danger btn-icon btn-rounded" id="btn_delete_all">
+                                                    <button type="button" onclick="deleteItems('<?= url("/typeprojet/deletes") ?>', '<?= url("/typeprojet") ?>')" class="btn btn-danger btn-icon btn-rounded" id="btn_delete_all">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
                                                 </th>

@@ -49,14 +49,7 @@ class TyperubriqueController extends Controller
      */
     public function store(Request $request)
     {
-    //     $request->validate([
-    //     'TRB_LIB'=>'required'
-    // ]);
-    //   $typerubrique=new Typerubrique([
-    //    'TRB_LIB' => $request->get('TRB_LIB')
-    //   ]);
-    //    $typerubrique->save();
-    //    return redirect('/creertyperubrique')->with('success', 'Stock has been added');
+    
        try { 
         $input = $request->all();     
         $typerubrique = Typerubrique::create($input);        
@@ -107,7 +100,8 @@ class TyperubriqueController extends Controller
     }
 
     public function deletes(Request $request)
-    {   $input = $request->all(); 
+    {   //dd($request);
+        $input = $request->all(); 
         $d = $input["d"];
         //dd($d);
         if(!empty($d)) {
@@ -117,64 +111,5 @@ class TyperubriqueController extends Controller
             }
         }                  
         return redirect()->route('parametres.typerubrique.index');
-    }
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function show()
-    {
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function affichertyperubrique($TRB_NUM)
-    {
-        $typerubrique= Typerubrique::find($TRB_NUM);
-        return view('Typerubrique.affichertyperubrique', compact('typerubrique'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function updatetyperubrique(Request $request,$TRB_NUM)
-      { $request->validate([
-        'TRB_LIB'=>'required'
-    ]);
-
-      $typerubrique= Typerubrique::find($TRB_NUM);
-      $typerubrique->TRB_LIB = $request->get('TRB_LIB');
-      $typerubrique->save();
-
-      return redirect('/indextyperubrique')->with('success', 'la modification a été un succès ');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function destroytyperubrique($TRB_NUM)
-    {
-     $typerubrique = Typerubrique::find($TRB_NUM);
-     $typerubrique->delete();
-
-     return redirect('/indextyperubrique')->with('success', 'Stock has been deleted Successfully');
     }
 }

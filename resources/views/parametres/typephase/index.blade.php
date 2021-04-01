@@ -7,12 +7,12 @@
                         <div class="row align-items-center ">
                             <div class="col-md-8">
                                 <div class="page-title-box">
-                                    <h4 class="page-title">Liste des types de rubrique</h4>
+                                    <h4 class="page-title">Liste des types de phases</h4>
                                     <ol class="breadcrumb">                                        
                                         <li class="breadcrumb-item">
                                             <a href="javascript:void(0);">Paramètres</a>
                                         </li>
-                                        <li class="breadcrumb-item active">Liste des types rubrique</li>
+                                        <li class="breadcrumb-item active">Liste des types phases</li>
                                     </ol>
                                 </div>
                             </div>
@@ -23,7 +23,7 @@
                                             <p class="text-muted">A warning message, with a function attached to the "Confirm"-button...</p>
                                             <button type="button" class="btn btn-primary waves-effect waves-light" id="sa-params">Click me</button>
                                         </div> -->
-                                <a href="{{ url('/typerubrique/create') }}" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-container="modal-container" >Ajouter un type de rubrique</a>
+                                <a href="{{ url('/typephase/create') }}" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-container="modal-container" >Ajouter un type de phase</a>
                                     <!-- <input type="text" class="form-control" data-date-format="MM dd, yyyy" readonly="readonly" id="datepicker">data-target="#myModal"
                                     <i class="mdi mdi-chevron-down mdi-drop"></i> -->
                                 </div>
@@ -52,14 +52,14 @@
                                         </thead>
 
                                         <tbody>
-                                        <?php foreach ($typerubriques as $typerubrique) : ?>
-                                            <tr><td><input class="my_checkbox" type="checkbox" name="check[]" id="<?php echo $typerubrique->TRB_NUM ?>" > </td>
-                                                <td>{{$typerubrique->TRB_NUM}}</td>
-                                                <td>{{$typerubrique->TRB_LIB}}</td>  
-                                                <td><a href="<?php echo url("typerubrique/$typerubrique->TRB_NUM/edit") ?>"  data-toggle="modal" data-container="modal-container"  class="waves-effect waves-light"><i class="typcn typcn-pencil text-success"></i></a>
+                                        <?php foreach ($typephases as $typeph) : ?>
+                                            <tr><td><input class="my_checkbox" type="checkbox" name="check[]" id="<?php echo $typeph->TPH_NUM ?>" > </td>
+                                                <td>{{$typeph->TPH_NUM}}</td>
+                                                <td>{{$typeph->TPH_LIB}}</td>  
+                                                <td><a href="<?php echo url("typephase/$typeph->TPH_NUM/edit") ?>"  data-toggle="modal" data-container="modal-container"  class="waves-effect waves-light"><i class="typcn typcn-pencil text-success"></i></a>
                                                 &nbsp;  | &nbsp;
                                                 <a href ="#" data-toggle="tooltip" title="Supprimer!"
-                                                                        onclick="deleteItem('<?= $typerubrique->TRB_NUM ?>','<?= url("/typerubrique/delete/$typerubrique->TRB_NUM") ?>','<?= url("/typerubrique") ?>')">
+                                                                        onclick="deleteItem('<?= $typeph->TPH_NUM ?>','<?= url("/typephase/delete/$typeph->TPH_NUM") ?>','<?= url("/typephase") ?>')">
                                                     <i class="typcn typcn-trash text-danger "></i>
                                                 </a>
                                             </td>                                             
@@ -69,7 +69,7 @@
                                         <tfooter>
                                             <tr >
                                                 <th colspan="5">
-                                                    <button type="button" onclick="deleteItems('<?= url("/typerubrique/deletes") ?>', '<?= url("/typerubrique") ?>')" class="btn btn-danger btn-icon btn-rounded" id="btn_delete_all">
+                                                    <button type="button" onclick="deleteItems('<?= url("/typephase/deletes") ?>', '<?= url("/typephase") ?>')" class="btn btn-danger btn-icon btn-rounded" id="btn_delete_all">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
                                                 </th>
