@@ -31,7 +31,7 @@
                                                     <div class="form-group">
                                                         <label for="DEV_LIB" class="control-label">Libellé<span class="text-danger">*</span> :</label>
                                                         <!--<div class="col-sm-12">-->
-                                                            <input type="text" name="PAY_LIB" id="DEV_LIB" class="form-control form-control-rounded"
+                                                            <input type="text" name="DEV_LIB" id="DEV_LIB" class="form-control form-control-rounded"
                                                                 required="required"
                                                                 value="<?= isset($devise) ?  $devise->DEV_LIB : "" ; ?>"
                                                                                             data-rule-remote="<?php //echo url('categorie/exists') ?>?table=categorie&column=DEV_LIB<?//=  !empty($typerubrique) ? '&key=TRB_LIB&value='.$typerubrique->TRB_LIB : '' ;?>"

@@ -98,3 +98,12 @@ Route::get('/devise/{id}/edit', ['uses' => 'DeviseController@edit', 'as' => 'par
 Route::get('/devise/delete/{id}', ['uses' => 'DeviseController@delete', 'as' => 'parametres.devise.delete']);
 Route::get('/devise/deletes', ['uses' => 'DeviseController@deletes', 'as' => 'parametres.devise.deletes']);
 Route::post('/devise/update', ['uses' => 'DeviseController@update', 'as' => 'parametres.devise.update']);
+
+//Famille
+Route::get('/famille', ['uses' => 'FamilleController@index', 'as' => 'parametres.famille.index']);//la 3 partie represente la vue qu'on va utiliser
+Route::get('/famille/create', ['uses' => 'FamilleController@create', 'as' => 'parametres.famille.create']);
+Route::post('/famille/store', ['uses' => 'FamilleController@store', 'as' => 'parametres.famille.store']);
+Route::get('/famille/{id}/edit', ['uses' => 'FamilleController@edit', 'as' => 'parametres.famille.create']);
+Route::get('/famille/delete/{id}', ['uses' => 'FamilleController@delete', 'as' => 'parametres.famille.delete']);
+Route::get('/famille/deletes', ['uses' => 'FamilleController@deletes', 'as' => 'parametres.famille.deletes']);
+Route::post('/famille/update', ['uses' => 'FamilleController@update', 'as' => 'parametres.famille.update']);

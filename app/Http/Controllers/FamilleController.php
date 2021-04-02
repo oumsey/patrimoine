@@ -2,24 +2,23 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Http\Request;
 use App\Model\Famille;
-
+use App\Http\Controllers\PDOException;
 
 class FamilleController extends Controller
 {
-    /**
+      /**
      * Display a listing of the resource.
      *
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function indexfamille()
+    public function index()
     {
-       $famille=Famille::all();
-
-        return view('Famille.indexfamille', compact('famille'));
+       $familles = Famille::all();
+      //  dd($typerubriques);
+       return view('parametres.famille.index', compact('familles'));
     }
 
     /**
@@ -28,9 +27,17 @@ class FamilleController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function creerfamille()
+    public function create()
     {
-        return view('Famille.creerfamille');
+        //dd("MANCI");
+        return view('parametres.famille.create');
+    }
+
+    public function edit($id)
+    { 
+        $famille = Famille::findOrFail($id); 
+       //dd($famille);     
+        return view('parametres.famille.create')->with('famille', $famille);
     }
 
     /**
@@ -40,101 +47,68 @@ class FamilleController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function storefamille(Request $request)
+    public function store(Request $request)
     {
-        $request->validate([
-        'FAM_NOM'=>'required',
-        'FAM_TEL'=>'required', 
-        'FAM_BOITPOSTE'=>'required',
-        'FAM_EMAIL'=>'required',
-        'FAM_NOMRESPO'=>'required',
-        'FAM_AGERETRAIT'=>'required',
-        'FAM_MONTANTESCOMPTE'=>'required'
-    ]);
-      $famille=new Famille([
-        'FAM_NOM'=>$request->get('FAM_NOM'),
-        'FAM_TEL'=>$request->get('FAM_TEL'), 
-        'FAM_BOITPOSTE'=>$request->get('FAM_BOITPOSTE'),
-        'FAM_EMAIL'=>$request->get('FAM_EMAIL'),
-        'FAM_NOMRESPO'=>$request->get('FAM_NOMRESPO'),
-        'FAM_AGERETRAIT'=>$request->get('FAM_AGERETRAIT'),
-        'FAM_MONTANTESCOMPTE'=>$request->get('FAM_MONTANTESCOMPTE')
-      ]);
-       $famille->save();
-       return redirect('/creerfamille')->with('success', 'Stock has been added');
+       try { 
+        $input = $request->all();        
+        $famille = Famille::create($input); 
+       if ($request->ajax() || $request->is('api/*')) {
+           return response()->json(['success'=>'Got Simple Ajax Request.']);            
+       } else {            
+           $request->session()->flash('success', 'Enregistrement effectué avec succès');           
+           return redirect()->route('parametres.famille.index');
+       }
+       }catch(PDOException $exception) {
+//            DB::rollBack();
+           if ($request->ajax()) {
+               return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+           } else {
+               return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+           }
+       }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function showfamille($FAM_NUM)
-    {
-        $famille=Famille::find($FAM_NUM);
-        return view('/indexfamille', compact('famille'));
+    public function update(Request $request)
+    {   
+      try { 
+            $input = $request->all();             
+            $famille = Famille::findOrFail($input["FAM_NUM"]);
+            $input = $request->all();
+            $famille->fill($input);
+            $famille->update();                
+            $request->session()->flash('success', 'Modification effectué avec succès');           
+            return redirect()->route('parametres.famille.index');
+       
+        }catch(PDOException $exception) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+            } else {
+                return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+            }
+        }
+       
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function afficherfamille($FAM_NUM)
-    {
-        $famille=Famille::find($FAM_NUM);
-        return view('Famille.afficherfamille', compact('famille'));
+    public function delete($id)
+    { 
+        $famille= Famille::findOrFail($id); 
+        $famille->delete();
+        //dd($categorie);     
+       // $request->session()->flash('success', 'Modification effectué avec succès');           
+        return redirect()->route('parametres.famille.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function updatefamille(Request $request, $FAM_NUM)
-    {
-        $request->validate([
-        'FAM_NOM'=>'required',
-        'FAM_TEL'=>'required', 
-        'FAM_BOITPOSTE'=>'required',
-        'FAM_EMAIL'=>'required',
-        'FAM_NOMRESPO'=>'required',
-        'FAM_AGERETRAIT'=>'required',
-        'FAM_MONTANTESCOMPTE'=>'required'
-    ]);
-
-      $famille = Famille::find($FAM_NUM);
-      $famille->FAM_NOM =$request->get('FAM_NOM');
-      $famille->FAM_TEL =$request->get('FAM_TEL');
-      $famille->FAM_BOITPOSTE =$request->get('FAM_BOITPOSTE');
-      $famille->FAM_EMAIL =$request->get('FAM_EMAIL');
-      $famille->FAM_NOMRESPO =$request->get('FAM_NOMRESPO');
-      $famille->FAM_AGERETRAIT =$request->get('FAM_AGERETRAIT');
-      $famille->FAM_MONTANTESCOMPTE =$request->get('FAM_MONTANTESCOMPTE');
-      $famille->save();
-
-      return redirect('/indexfamille')->with('success', 'Stock has been ');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function destroyfamille($FAM_NUM)
-    {
-     $famille = Famille::find($FAM_NUM);
-     $famille->delete();
-
-     return redirect('/indexfamille')->with('success', 'Stock has been deleted Successfully');
+    public function deletes(Request $request)
+    {   //dd($request);
+        $input = $request->all(); 
+        $d = $input["d"];
+        //dd($d);
+        if(!empty($d)) {
+            foreach ($d as $id) {
+                $famille = Famille::findOrFail($id); 
+                $famille->delete();
+            }
+        }                  
+        return redirect()->route('parametres.famille.index');
     }
 }
