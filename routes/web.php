@@ -44,6 +44,7 @@ Route::get('/agencebancaire/delete/{id}', ['uses' => 'AgencebancaireController@d
 Route::get('/agencebancaire/deletes', ['uses' => 'AgencebancaireController@deletes', 'as' => 'parametres.agencebancaire.deletes']);
 Route::post('/agencebancaire/update', ['uses' => 'AgencebancaireController@update', 'as' => 'parametres.agencebancaire.update']);
 Route::post('/banque', ['uses' => 'BanqueController@index', 'as' => 'parametres.banque.index']);
+
 //Type de phases
 Route::get('/typephase', ['uses' => 'TypephaseController@index', 'as' => 'parametres.typephase.index']);//la 3 partie represente la vue qu'on va utiliser
 Route::get('/typephase/create', ['uses' => 'TypephaseController@create', 'as' => 'parametres.typephase.create']);
@@ -52,6 +53,7 @@ Route::get('/typephase/{id}/edit', ['uses' => 'TypephaseController@edit', 'as' =
 Route::get('/typephase/delete/{id}', ['uses' => 'TypephaseController@delete', 'as' => 'parametres.typephase.delete']);
 Route::get('/typephase/deletes', ['uses' => 'TypephaseController@deletes', 'as' => 'parametres.typephase.deletes']);
 Route::post('/typephase/update', ['uses' => 'TypephaseController@update', 'as' => 'parametres.typephase.update']);
+
 //Type de projets
 Route::get('/typeprojet', ['uses' => 'TypeprojetController@index', 'as' => 'parametres.typeprojet.index']);//la 3 partie represente la vue qu'on va utiliser
 Route::get('/typeprojet/create', ['uses' => 'TypeprojetController@create', 'as' => 'parametres.typeprojet.create']);
@@ -60,3 +62,39 @@ Route::get('/typeprojet/{id}/edit', ['uses' => 'TypeprojetController@edit', 'as'
 Route::get('/typeprojet/delete/{id}', ['uses' => 'TypeprojetController@delete', 'as' => 'parametres.typeprojet.delete']);
 Route::get('/typeprojet/deletes', ['uses' => 'TypeprojetController@deletes', 'as' => 'parametres.typeprojet.deletes']);
 Route::post('/typeprojet/update', ['uses' => 'TypeprojetController@update', 'as' => 'parametres.typeprojet.update']);
+
+//Type de Biens
+Route::get('/typebien', ['uses' => 'TypebienController@index', 'as' => 'parametres.typebien.index']);//la 3 partie represente la vue qu'on va utiliser
+Route::get('/typebien/create', ['uses' => 'TypebienController@create', 'as' => 'parametres.typebien.create']);
+Route::post('/typebien/store', ['uses' => 'TypebienController@store', 'as' => 'parametres.typebien.store']);
+Route::get('/typebien/{id}/edit', ['uses' => 'TypebienController@edit', 'as' => 'parametres.typebien.create']);
+Route::get('/typebien/delete/{id}', ['uses' => 'TypebienController@delete', 'as' => 'parametres.typebien.delete']);
+Route::get('/typebien/deletes', ['uses' => 'TypebienController@deletes', 'as' => 'parametres.typebien.deletes']);
+Route::post('/typebien/update', ['uses' => 'TypebienController@update', 'as' => 'parametres.typebien.update']);
+
+//Type de Comptes
+Route::get('/typecompte', ['uses' => 'TypecompteController@index', 'as' => 'parametres.typecompte.index']);//la 3 partie represente la vue qu'on va utiliser
+Route::get('/typecompte/create', ['uses' => 'TypecompteController@create', 'as' => 'parametres.typecompte.create']);
+Route::post('/typecompte/store', ['uses' => 'TypecompteController@store', 'as' => 'parametres.typecompte.store']);
+Route::get('/typecompte/{id}/edit', ['uses' => 'TypecompteController@edit', 'as' => 'parametres.typecompte.create']);
+Route::get('/typecompte/delete/{id}', ['uses' => 'TypecompteController@delete', 'as' => 'parametres.typecompte.delete']);
+Route::get('/typecompte/deletes', ['uses' => 'TypecompteController@deletes', 'as' => 'parametres.typecompte.deletes']);
+Route::post('/typecompte/update', ['uses' => 'TypecompteController@update', 'as' => 'parametres.typecompte.update']);
+
+//Pays
+Route::get('/pays', ['uses' => 'PaysController@index', 'as' => 'parametres.pays.index']);//la 3 partie represente la vue qu'on va utiliser
+Route::get('/pays/create', ['uses' => 'PaysController@create', 'as' => 'parametres.pays.create']);
+Route::post('/pays/store', ['uses' => 'PaysController@store', 'as' => 'parametres.pays.store']);
+Route::get('/pays/{id}/edit', ['uses' => 'PaysController@edit', 'as' => 'parametres.pays.create']);
+Route::get('/pays/delete/{id}', ['uses' => 'PaysController@delete', 'as' => 'parametres.pays.delete']);
+Route::get('/pays/deletes', ['uses' => 'PaysController@deletes', 'as' => 'parametres.pays.deletes']);
+Route::post('/pays/update', ['uses' => 'PaysController@update', 'as' => 'parametres.pays.update']);
+
+//Devise
+Route::get('/devise', ['uses' => 'DeviseController@index', 'as' => 'parametres.devise.index']);//la 3 partie represente la vue qu'on va utiliser
+Route::get('/devise/create', ['uses' => 'DeviseController@create', 'as' => 'parametres.devise.create']);
+Route::post('/devise/store', ['uses' => 'DeviseController@store', 'as' => 'parametres.devise.store']);
+Route::get('/devise/{id}/edit', ['uses' => 'DeviseController@edit', 'as' => 'parametres.devise.create']);
+Route::get('/devise/delete/{id}', ['uses' => 'DeviseController@delete', 'as' => 'parametres.devise.delete']);
+Route::get('/devise/deletes', ['uses' => 'DeviseController@deletes', 'as' => 'parametres.devise.deletes']);
+Route::post('/devise/update', ['uses' => 'DeviseController@update', 'as' => 'parametres.devise.update']);

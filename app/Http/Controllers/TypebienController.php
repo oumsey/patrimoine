@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Typebien;
+use App\Http\Controllers\PDOException;
 
 class TypebienController extends Controller
 {
@@ -13,11 +14,11 @@ class TypebienController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function indextypebien()
+    public function index()
     {
-       $typebien=Typebien::all();
-
-       return view('Typebien.indextypebien', compact('typebien'));
+       $typebiens = Typebien::all();
+      //  dd($typerubriques);
+       return view('parametres.typebien.index', compact('typebiens'));
     }
 
     /**
@@ -26,9 +27,17 @@ class TypebienController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function creertypebien()
+    public function create()
     {
-        return view('Typebien.creertypebien');
+        //dd("MANCI");
+        return view('parametres.typebien.create');
+    }
+
+    public function edit($id)
+    { 
+        $typebien = Typebien::findOrFail($id); 
+       // dd($categorie);     
+        return view('parametres.typebien.create')->with('typebien', $typebien);
     }
 
     /**
@@ -38,75 +47,68 @@ class TypebienController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function storetypebien(Request $request)
+    public function store(Request $request)
     {
-        $request->validate([
-        'TBI_LIB'=>'required'
-    ]);
-      $typebien=new Typebien([
-       'TBI_LIB' => $request->get('TBI_LIB')
-      ]);
-       $typebien->save();
-       return redirect('/creertypebien')->with('success', 'Stock has been added');
+       try { 
+        $input = $request->all();     
+        $typebien = Typebien::create($input);        
+       if ($request->ajax() || $request->is('api/*')) {
+           return response()->json(['success'=>'Got Simple Ajax Request.']);            
+       } else {            
+           $request->session()->flash('success', 'Enregistrement effectué avec succès');           
+           return redirect()->route('parametres.typebien.index');
+       }
+       }catch(PDOException $exception) {
+//            DB::rollBack();
+           if ($request->ajax()) {
+               return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+           } else {
+               return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+           }
+       }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function show()
-    {
-
+    public function update(Request $request)
+    {   
+      try { 
+            $input = $request->all();             
+            $typebien = Typebien::findOrFail($input["TBI_NUM"]);
+            $input = $request->all();
+            $typebien->fill($input);
+            $typebien->update();                
+            $request->session()->flash('success', 'Modification effectué avec succès');           
+            return redirect()->route('parametres.typebien.index');
+       
+        }catch(PDOException $exception) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+            } else {
+                return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+            }
+        }
+       
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function affichertypebien($TBI_NUM)
-    {
-        $typebien= Typebien::find($TBI_NUM);
-        return view('Typebien.affichertypebien', compact('typebien'));
+    public function delete($id)
+    { 
+        $typebien= Typebien::findOrFail($id); 
+        $typebien->delete();
+        //dd($categorie);     
+       // $request->session()->flash('success', 'Modification effectué avec succès');           
+        return redirect()->route('parametres.typebien.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function updatetypebien(Request $request,$TBI_NUM)
-      { $request->validate([
-        'TBI_LIB'=>'required'
-    ]);
-
-      $typebien= Typebien::find($TBI_NUM);
-      $typebien->TBI_LIB = $request->get('TBI_LIB');
-      $typebien->save();
-
-      return redirect('/indextypebien')->with('success', 'la modification a été un succès ');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function destroytypebien($TBI_NUM)
-    {
-     $typebien = Typebien::find($TBI_NUM);
-     $typebien->delete();
-
-     return redirect('/indextypebien')->with('success', 'Stock has been deleted Successfully');
+    public function deletes(Request $request)
+    {   //dd($request);
+        $input = $request->all(); 
+        $d = $input["d"];
+        //dd($d);
+        if(!empty($d)) {
+            foreach ($d as $id) {
+                $typebien = Typebien::findOrFail($id); 
+                $typebien->delete();
+            }
+        }                  
+        return redirect()->route('parametres.typebien.index');
     }
 }

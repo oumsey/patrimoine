@@ -2,24 +2,23 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Http\Request;
 use App\Model\Pays;
-
+use App\Http\Controllers\PDOException;
 
 class PaysController extends Controller
 {
-    /**
+      /**
      * Display a listing of the resource.
      *
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function indexpays()
+    public function index()
     {
-       $pays=Pays::all();
-
-        return view('Pays.indexpays', compact('pays'));
+       $payss = Pays::all();
+      //  dd($typerubriques);
+       return view('parametres.pays.index', compact('payss'));
     }
 
     /**
@@ -28,9 +27,17 @@ class PaysController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function creerpays()
+    public function create()
     {
-        return view('Pays.creerpays');
+        //dd("MANCI");
+        return view('parametres.pays.create');
+    }
+
+    public function edit($id)
+    { 
+        $pays = Pays::findOrFail($id); 
+       // dd($categorie);     
+        return view('parametres.pays.create')->with('pays', $pays);
     }
 
     /**
@@ -40,81 +47,68 @@ class PaysController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function storepays(Request $request)
+    public function store(Request $request)
     {
-        $request->validate([
-        'PAY_NOM'=>'required',
-        'PAY_NATIONALITE'=> 'required'
-    ]);
-      $pays=new Pays([
-       'PAY_NOM' => $request->get('PAY_NOM'),
-       'PAY_NATIONALITE'=> $request->get('PAY_NATIONALITE'),
-      ]);
-       $pays->save();
-       return redirect('/creerpays')->with('success', 'Stock has been added');
+       try { 
+        $input = $request->all();     
+        $pays = Pays::create($input);        
+       if ($request->ajax() || $request->is('api/*')) {
+           return response()->json(['success'=>'Got Simple Ajax Request.']);            
+       } else {            
+           $request->session()->flash('success', 'Enregistrement effectué avec succès');           
+           return redirect()->route('parametres.pays.index');
+       }
+       }catch(PDOException $exception) {
+//            DB::rollBack();
+           if ($request->ajax()) {
+               return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+           } else {
+               return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+           }
+       }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function showpays($PAY_NUM)
-    {
-        $pays=Pays::find($PAY_NUM);
-        return view('/indexpays', compact('pays'));
+    public function update(Request $request)
+    {   
+      try { 
+            $input = $request->all();             
+            $pays = Pays::findOrFail($input["PAY_NUM"]);
+            $input = $request->all();
+            $pays->fill($input);
+            $pays->update();                
+            $request->session()->flash('success', 'Modification effectué avec succès');           
+            return redirect()->route('parametres.pays.index');
+       
+        }catch(PDOException $exception) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+            } else {
+                return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+            }
+        }
+       
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function afficherpays($PAY_NUM)
-    {
-        $pays= Pays::find($PAY_NUM);
-        return view('Pays.afficherpays', compact('pays'));
+    public function delete($id)
+    { 
+        $pays= Pays::findOrFail($id); 
+        $pays->delete();
+        //dd($categorie);     
+       // $request->session()->flash('success', 'Modification effectué avec succès');           
+        return redirect()->route('parametres.pays.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function updatepays(Request $request, $PAY_NUM)
-    {
-        $request->validate([
-        'PAY_NOM'=>'required',
-        'PAY_NATIONALITE'=> 'required'
-    ]);
-
-      $pays = Pays::find($PAY_NUM);
-      $pays->PAY_NOM = $request->get('PAY_NOM');
-      $pays->PAY_NATIONALITE = $request->get('PAY_NATIONALITE');
-      $pays->save();
-
-      return redirect('/indexpays')->with('success', 'Stock has been ');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function destroypays($PAY_NUM)
-    {
-     $pays = Pays::find($PAY_NUM);
-     $pays->delete();
-
-     return redirect('/indexpays')->with('success', 'Stock has been deleted Successfully');
+    public function deletes(Request $request)
+    {   //dd($request);
+        $input = $request->all(); 
+        $d = $input["d"];
+        //dd($d);
+        if(!empty($d)) {
+            foreach ($d as $id) {
+                $pays = Pays::findOrFail($id); 
+                $pays->delete();
+            }
+        }                  
+        return redirect()->route('parametres.pays.index');
     }
 }

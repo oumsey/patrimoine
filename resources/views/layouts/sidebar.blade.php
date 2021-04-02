@@ -52,7 +52,11 @@
                             <ul class="submenu">
                                 <li><a href="{{ url('/agencebancaire') }}">Agence Bancaire</a></li>
                                 <li><a href="{{ url('/banque') }}">Banque</a></li>
-                                 <li><a href="{{ url('/typephase') }}">Type de Phases</a></li>
+                                <li><a href="{{ url('/devise') }}">Devise</a></li>
+                                <li><a href="{{ url('/pays') }}">Pays</a></li>
+                                <li><a href="{{ url('/typebien') }}">Type de Biens</a></li>
+                                <li><a href="{{ url('/typecompte') }}">Type de Comptes</a></li>
+                                <li><a href="{{ url('/typephase') }}">Type de Phases</a></li>
                                 <li><a href="{{ url('/typerubrique') }}">Type de rubriques</a></li>
                                 <li><a href="{{ url('/rubrique') }}">Rubriques</a></li>
                                 <li><a href="ui-buttons.html">Produits</a></li>

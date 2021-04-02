@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Typecompte;
+use App\Http\Controllers\PDOException;
 
 class TypecompteController extends Controller
 {
@@ -13,11 +14,11 @@ class TypecompteController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function indextypecompte()
+    public function index()
     {
-       $typecompte=Typecompte::all();
-
-       return view('Typecompte.indextypecompte', compact('typecompte'));
+       $typecomptes = Typecompte::all();
+      //  dd($typerubriques);
+       return view('parametres.typecompte.index', compact('typecomptes'));
     }
 
     /**
@@ -26,9 +27,17 @@ class TypecompteController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function creertypecompte()
+    public function create()
     {
-        return view('Typecompte.creertypecompte');
+        //dd("MANCI");
+        return view('parametres.typecompte.create');
+    }
+
+    public function edit($id)
+    { 
+        $typecompte = Typecompte::findOrFail($id); 
+       // dd($categorie);     
+        return view('parametres.typecompte.create')->with('typecompte', $typecompte);
     }
 
     /**
@@ -38,75 +47,68 @@ class TypecompteController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function storetypecompte(Request $request)
+    public function store(Request $request)
     {
-        $request->validate([
-        'TCP_LIB'=>'required'
-    ]);
-      $typecompte=new Typecompte([
-       'TCP_LIB' => $request->get('TCP_LIB')
-      ]);
-       $typecompte->save();
-       return redirect('/creertypecompte')->with('success', 'Stock has been added');
+       try { 
+        $input = $request->all();     
+        $typecompte = Typecompte::create($input);        
+       if ($request->ajax() || $request->is('api/*')) {
+           return response()->json(['success'=>'Got Simple Ajax Request.']);            
+       } else {            
+           $request->session()->flash('success', 'Enregistrement effectué avec succès');           
+           return redirect()->route('parametres.typecompte.index');
+       }
+       }catch(PDOException $exception) {
+//            DB::rollBack();
+           if ($request->ajax()) {
+               return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+           } else {
+               return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+           }
+       }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function show()
-    {
-
+    public function update(Request $request)
+    {   
+      try { 
+            $input = $request->all();             
+            $typecompte = Typecompte::findOrFail($input["TCP_NUM"]);
+            $input = $request->all();
+            $typecompte->fill($input);
+            $typecompte->update();                
+            $request->session()->flash('success', 'Modification effectué avec succès');           
+            return redirect()->route('parametres.typecompte.index');
+       
+        }catch(PDOException $exception) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+            } else {
+                return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+            }
+        }
+       
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function affichertypecompte($TCP_NUM)
-    {
-     $typecompte= Typecompte::find($TCP_NUM);
-        return view('Typecompte.affichertypecompte', compact('typecompte'));
+    public function delete($id)
+    { 
+        $typecompte= Typecompte::findOrFail($id); 
+        $typecompte->delete();
+        //dd($categorie);     
+       // $request->session()->flash('success', 'Modification effectué avec succès');           
+        return redirect()->route('parametres.typecompte.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function updatetypecompte(Request $request,$TCP_NUM)
-      { $request->validate([
-        'TCP_LIB'=>'required'
-    ]);
-
-      $typecompte= Typecompte::find($TCP_NUM);
-      $typecompte->TCP_LIB = $request->get('TCP_LIB');
-      $typecompte->save();
-
-      return redirect('/indextypecompte')->with('success', 'la modification a été un succès ');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function destroytypecompte($TCP_NUM)
-    {
-     $typecompte = Typecompte::find($TCP_NUM);
-     $typecompte->delete();
-
-     return redirect('/indextypecompte')->with('success', 'Stock has been deleted Successfully');
+    public function deletes(Request $request)
+    {   //dd($request);
+        $input = $request->all(); 
+        $d = $input["d"];
+        //dd($d);
+        if(!empty($d)) {
+            foreach ($d as $id) {
+                $typecompte = Typecompte::findOrFail($id); 
+                $typecompte->delete();
+            }
+        }                  
+        return redirect()->route('parametres.typecompte.index');
     }
 }

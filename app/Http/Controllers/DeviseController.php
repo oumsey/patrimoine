@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use DummyFullModelClass;
-use App\lain;
 use Illuminate\Http\Request;
+use App\Model\Devise;
+use App\Http\Controllers\PDOException;
 
 class DeviseController extends Controller
 {
-    /**
+      /**
      * Display a listing of the resource.
      *
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function index(lain $lain)
+    public function index()
     {
-        //
+       $devises = Devise::all();
+      //  dd($typerubriques);
+       return view('parametres.devise.index', compact('devises'));
     }
 
     /**
@@ -25,9 +27,17 @@ class DeviseController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function create(lain $lain)
+    public function create()
     {
-        //
+        //dd("MANCI");
+        return view('parametres.devise.create');
+    }
+
+    public function edit($id)
+    { 
+        $devise = Devise::findOrFail($id); 
+       // dd($categorie);     
+        return view('parametres.devise.create')->with('devise', $devise);
     }
 
     /**
@@ -37,57 +47,68 @@ class DeviseController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, lain $lain)
+    public function store(Request $request)
     {
-        //
+       try { 
+        $input = $request->all();     
+        $devise = Devise::create($input);        
+       if ($request->ajax() || $request->is('api/*')) {
+           return response()->json(['success'=>'Got Simple Ajax Request.']);            
+       } else {            
+           $request->session()->flash('success', 'Enregistrement effectué avec succès');           
+           return redirect()->route('parametres.devise.index');
+       }
+       }catch(PDOException $exception) {
+//            DB::rollBack();
+           if ($request->ajax()) {
+               return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+           } else {
+               return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+           }
+       }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function show(lain $lain, DummyModelClass $DummyModelVariable)
-    {
-        //
+    public function update(Request $request)
+    {   
+      try { 
+            $input = $request->all();             
+            $devise = Devise::findOrFail($input["DEV_NUM"]);
+            $input = $request->all();
+            $devise->fill($input);
+            $devise->update();                
+            $request->session()->flash('success', 'Modification effectué avec succès');           
+            return redirect()->route('parametres.devise.index');
+       
+        }catch(PDOException $exception) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+            } else {
+                return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+            }
+        }
+       
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(lain $lain, DummyModelClass $DummyModelVariable)
-    {
-        //
+    public function delete($id)
+    { 
+        $devise= Devise::findOrFail($id); 
+        $devise->delete();
+        //dd($categorie);     
+       // $request->session()->flash('success', 'Modification effectué avec succès');           
+        return redirect()->route('parametres.devise.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, lain $lain, DummyModelClass $DummyModelVariable)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(lain $lain, DummyModelClass $DummyModelVariable)
-    {
-        //
+    public function deletes(Request $request)
+    {   //dd($request);
+        $input = $request->all(); 
+        $d = $input["d"];
+        //dd($d);
+        if(!empty($d)) {
+            foreach ($d as $id) {
+                $devise = Devise::findOrFail($id); 
+                $devise->delete();
+            }
+        }                  
+        return redirect()->route('parametres.devise.index');
     }
 }
