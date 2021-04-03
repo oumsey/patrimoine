@@ -55,6 +55,7 @@
                                 <li><a href="{{ url('/devise') }}">Devise</a></li>
                                 <li><a href="{{ url('/famille') }}">Familles</a></li>
                                 <li><a href="{{ url('/pays') }}">Pays</a></li>
+                                <li><a href="{{ url('/region') }}">Régions</a></li>
                                 <li><a href="{{ url('/typebien') }}">Type de Biens</a></li>
                                 <li><a href="{{ url('/typecompte') }}">Type de Comptes</a></li>
                                 <li><a href="{{ url('/typephase') }}">Type de Phases</a></li>

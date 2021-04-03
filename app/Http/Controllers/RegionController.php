@@ -5,23 +5,25 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Model\Region;
 use App\Model\Pays;
+use App\Http\Controllers\PDOException;
 
 class RegionController extends Controller
 {
-    /**
+      /**
      * Display a listing of the resource.
      *
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function indexregion()
+    public function index()
     {
-        $region=Region::all();
-        foreach ($region as $r) {
-            $r->pays=Pays::find($r->PAY_NUM);
-            //dd($r);
-        }
-        return view('Region.indexregion', compact('region'));
+       $regions =Region::all();
+       //dd($region);
+       foreach ($regions as $r) {
+           $r->pays=Pays::find($r->PAY_NUM);
+       }
+    //dd($agenceb);
+       return view('parametres.region.index', compact('regions'));
     }
 
     /**
@@ -30,10 +32,19 @@ class RegionController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function creerregion()
+    public function create()
     {
-        $pays=Pays::all();
-        return view('Region.creerregion', compact('pays'));
+        $pays = Pays::all();
+        return view('parametres.region.create')->with('pays', $pays);
+    }
+
+    public function edit($id)
+    { 
+        $region = Region::findOrFail($id);
+         $pays=Pays::all(); 
+       // dd($categorie);     
+        return view('parametres.region.create')->with('region', $region)
+                                                       ->with('pays', $pays);
     }
 
     /**
@@ -43,85 +54,68 @@ class RegionController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function storeregion(Request $request)
+    public function store(Request $request)
     {
-        $request->validate([
-        'REG_NOM'=>'required',
-        'REG_DESCR'=> 'required',
-        'PAY_NUM' => 'required'
-     ]);
-      $region=new Region([
-       'REG_NOM' => $request->get('REG_NOM'),
-       'REG_DESCR'=> $request->get('REG_DESCR'),
-       'PAY_NUM'=> $request->get('PAY_NUM'),
-      ]);
-       $region->save();
-      return redirect('/creerregion')->with('success', 'Stock has been added');
+       try { 
+        $input = $request->all();   
+        $region = Region::create($input);        
+       if ($request->ajax() || $request->is('api/*')) {
+           return response()->json(['success'=>'Got Simple Ajax Request.']);            
+       } else {            
+           $request->session()->flash('success', 'Enregistrement effectué avec succès');           
+           return redirect()->route('parametres.region.index');
+       }
+       }catch(PDOException $exception) {
+//            DB::rollBack();
+           if ($request->ajax()) {
+               return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+           } else {
+               return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+           }
+       }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function show()
-    {
-        //
+    public function update(Request $request)
+    {   
+      try { 
+            $input = $request->all();             
+            $region = Region::findOrFail($input["REG_NUM"]);
+            $input = $request->all();
+            $region->fill($input);
+            $region->update();                
+            $request->session()->flash('success', 'Modification effectué avec succès');           
+            return redirect()->route('parametres.region.index');
+       
+        }catch(PDOException $exception) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+            } else {
+                return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+            }
+        }
+       
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function afficherregion($REG_NUM)
-    {
-         $region= Region::find($REG_NUM);
-         $pays=Pays::all();
-        return view('Region.afficherregion', ['region'=>$region, 'pays'=>$pays,]);
+    public function delete($id)
+    { 
+        $region = Region::findOrFail($id); 
+        $region->delete();
+        //dd($categorie);     
+       // $request->session()->flash('success', 'Modification effectué avec succès');           
+        return redirect()->route('parametres.region.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function updateregion(Request $request, $REG_NUM )
-    {
-        $request->validate([
-        'REG_NOM'=>'required',
-        'REG_DESCR'=> 'required',
-        'PAY_NUM' => 'required',
-    ]);
-
-      $region = Region::find($REG_NUM);
-      $region->REG_NOM = $request->get('REG_NOM');
-      $region->REG_DESCR = $request->get('REG_DESCR');
-      $region->PAY_NUM= $request->get('PAY_NUM');
-      $region->save();
-
-      return redirect('/indexregion')->with('success', 'Stock has been ');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function destroyregion($REG_NUM)
-    {
-        $region = Region::find($REG_NUM);
-     $region->delete();
-
-     return redirect('/indexregion')->with('success', 'Stock has been deleted Successfully');
+    public function deletes(Request $request)
+    {   //dd($request);
+        $input = $request->all(); 
+        $d = $input["d"];
+        //dd($d);
+        if(!empty($d)) {
+            foreach ($d as $id) {
+                $region = Region::findOrFail($id); 
+                $region->delete();
+            }
+        }                  
+        return redirect()->route('parametres.region.index');
     }
 }

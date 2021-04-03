@@ -107,3 +107,12 @@ Route::get('/famille/{id}/edit', ['uses' => 'FamilleController@edit', 'as' => 'p
 Route::get('/famille/delete/{id}', ['uses' => 'FamilleController@delete', 'as' => 'parametres.famille.delete']);
 Route::get('/famille/deletes', ['uses' => 'FamilleController@deletes', 'as' => 'parametres.famille.deletes']);
 Route::post('/famille/update', ['uses' => 'FamilleController@update', 'as' => 'parametres.famille.update']);
+
+//Région
+Route::get('/region', ['uses' => 'RegionController@index', 'as' => 'parametres.region.index']);//la 3 partie represente la vue qu'on va utiliser
+Route::get('/region/create', ['uses' => 'RegionController@create', 'as' => 'parametres.region.create']);
+Route::post('/region/store', ['uses' => 'RegionController@store', 'as' => 'parametres.region.store']);
+Route::get('/region/{id}/edit', ['uses' => 'RegionController@edit', 'as' => 'parametres.region.create']);
+Route::get('/region/delete/{id}', ['uses' => 'RegionController@delete', 'as' => 'parametres.region.delete']);
+Route::get('/region/deletes', ['uses' => 'RegionController@deletes', 'as' => 'parametres.region.deletes']);
+Route::post('/region/update', ['uses' => 'RegionController@update', 'as' => 'parametres.region.update']);

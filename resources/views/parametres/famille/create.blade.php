@@ -11,7 +11,7 @@
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
-                                </div>
+                               FG </div>
                                 <div class="modal-body">
                                         <div class="row">
                                                 <div class="col-md-5">  
@@ -102,7 +102,7 @@
                                                     <div class="form-group">
                                                         <label for="FAM_AGERETRAIT" class="control-label">Age de la Retraite<span class="text-danger">*</span> :</label>
                                                         <!--<div class="col-sm-12">-->
-                                                            <input type="email" name="FAM_AGERETRAIT" id="FAM_AGERETRAIT" class="form-control form-control-rounded"
+                                                            <input type="text" name="FAM_AGERETRAIT" id="FAM_AGERETRAIT" class="form-control form-control-rounded"
                                                                 required="required"
                                                                 value="<?= isset($famille) ?  $famille->FAM_AGERETRAIT : "" ; ?>"
                                                                                             data-rule-remote="<?php //echo url('categorie/exists') ?>?table=categorie&column=FAM_AGERETRAIT<?//=  !empty($typerubrique) ? '&key=TRB_LIB&value='.$typerubrique->TRB_LIB : '' ;?>"
