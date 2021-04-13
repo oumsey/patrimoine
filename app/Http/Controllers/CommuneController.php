@@ -5,23 +5,25 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Model\Commune;
 use App\Model\Ville;
+use App\Http\Controllers\PDOException;
 
 class CommuneController extends Controller
 {
-    /**
+      /**
      * Display a listing of the resource.
      *
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function indexcommune()
+    public function index()
     {
-        $commune=Commune::all();
-        foreach ($commune as $r) {
-            $r->ville=Ville::find($r->VIL_NUM);
-            //dd($r);
-        }
-        return view('Commune.indexcommune', compact('commune'));
+       $communes = Commune::all();
+       //dd($agenceb);
+       foreach ($communes as $r) {
+           $r->ville=Ville::find($r->VIL_NUM);
+       }
+    //dd($agenceb);
+       return view('parametres.commune.index', compact('communes'));
     }
 
     /**
@@ -30,10 +32,19 @@ class CommuneController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function creercommune()
+    public function create()
     {
-        $ville=ville::all();
-        return view('Commune.creercommune', compact('ville'));
+        $ville=Ville::all();
+        return view('parametres.commune.create')->with('ville', $ville);
+    }
+
+    public function edit($id)
+    { 
+        $commune = Commune::findOrFail($id);
+         $ville=Ville::all(); 
+       // dd($categorie);     
+        return view('parametres.commune.create')->with('commune', $commune)
+                                                       ->with('ville', $ville);
     }
 
     /**
@@ -43,85 +54,68 @@ class CommuneController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function storecommune(Request $request)
+    public function store(Request $request)
     {
-        $request->validate([
-        'COM_NOM'=>'required',
-        'COM_DESCR'=> 'required',
-        'VIL_NUM' => 'required'
-     ]);
-      $commune=new Commune([
-       'COM_NOM' => $request->get('COM_NOM'),
-       'COM_DESCR'=> $request->get('COM_DESCR'),
-       'VIL_NUM'=> $request->get('VIL_NUM'),
-      ]);
-       $commune->save();
-      return redirect('/creercommune')->with('success', 'Stock has been added');
+       try { 
+        $input = $request->all();   
+        $commune = Commune::create($input);        
+       if ($request->ajax() || $request->is('api/*')) {
+           return response()->json(['success'=>'Got Simple Ajax Request.']);            
+       } else {            
+           $request->session()->flash('success', 'Enregistrement effectué avec succès');           
+           return redirect()->route('parametres.commune.index');
+       }
+       }catch(PDOException $exception) {
+//            DB::rollBack();
+           if ($request->ajax()) {
+               return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+           } else {
+               return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+           }
+       }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function show()
-    {
-        //
+    public function update(Request $request)
+    {   
+      try { 
+            $input = $request->all();             
+            $commune = Commune::findOrFail($input["COM_NUM"]);
+            $input = $request->all();
+            $commune->fill($input);
+            $commune->update();                
+            $request->session()->flash('success', 'Modification effectué avec succès');           
+            return redirect()->route('parametres.commune.index');
+       
+        }catch(PDOException $exception) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+            } else {
+                return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+            }
+        }
+       
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function affichercommune($COM_NUM)
-    {
-         $commune= Commune::find($COM_NUM);
-         $ville=Ville::all();
-        return view('Commune.affichercommune', ['commune'=>$commune, 'ville'=>$ville,]);
+    public function delete($id)
+    { 
+        $commune = Commune::findOrFail($id); 
+        $commune->delete();
+        //dd($categorie);     
+       // $request->session()->flash('success', 'Modification effectué avec succès');           
+        return redirect()->route('parametres.commune.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function updatecommune(Request $request, $COM_NUM )
-    {
-        $request->validate([
-        'COM_NOM'=>'required',
-        'COM_DESCR'=> 'required',
-        'VIL_NUM' => 'required',
-    ]);
-
-      $commune = Commune::find($COM_NUM);
-      $commune->COM_NOM = $request->get('COM_NOM');
-      $commune->COM_DESCR = $request->get('COM_DESCR');
-      $commune->VIL_NUM= $request->get('VIL_NUM');
-      $commune->save();
-
-      return redirect('/indexcommune')->with('success', 'Stock has been ');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function destroycommune($COM_NUM)
-    {
-        $commune = Commune::find($COM_NUM);
-     $commune->delete();
-
-     return redirect('/indexcommune')->with('success', 'Stock has been deleted Successfully');
+    public function deletes(Request $request)
+    {   //dd($request);
+        $input = $request->all(); 
+        $d = $input["d"];
+        //dd($d);
+        if(!empty($d)) {
+            foreach ($d as $id) {
+                $commune = Commune::findOrFail($id); 
+                $commune->delete();
+            }
+        }                  
+        return redirect()->route('parametres.commune.index');
     }
 }

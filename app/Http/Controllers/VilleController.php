@@ -5,23 +5,25 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Model\Ville;
 use App\Model\Region;
+use App\Http\Controllers\PDOException;
 
 class VilleController extends Controller
 {
-    /**
+      /**
      * Display a listing of the resource.
      *
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function indexville()
+    public function index()
     {
-        $ville=Ville::all();
-        foreach ($ville as $r) {
-            $r->region=Region::find($r->REG_NUM);
-            //dd($r);
-        }
-        return view('Ville.indexville', compact('ville'));
+       $villes = Ville::all();
+       //dd($agenceb);
+       foreach ($villes as $r) {
+           $r->region=Region::find($r->REG_NUM);
+       }
+    //dd($agenceb);
+       return view('parametres.ville.index', compact('villes'));
     }
 
     /**
@@ -30,10 +32,19 @@ class VilleController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function creerville()
+    public function create()
     {
         $region=Region::all();
-        return view('Ville.creerville', compact('region'));
+        return view('parametres.ville.create')->with('region', $region);
+    }
+
+    public function edit($id)
+    { 
+        $ville = Ville::findOrFail($id);
+         $region=Region::all(); 
+       // dd($categorie);     
+        return view('parametres.ville.create')->with('ville', $ville)
+                                                       ->with('region', $region);
     }
 
     /**
@@ -43,85 +54,68 @@ class VilleController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function storeville(Request $request)
+    public function store(Request $request)
     {
-        $request->validate([
-        'VIL_NOM'=>'required',
-        'VIL_DESCR'=> 'required',
-        'REG_NUM' => 'required'
-     ]);
-      $ville=new Ville([
-       'VIL_NOM' => $request->get('VIL_NOM'),
-       'VIL_DESCR'=> $request->get('VIL_DESCR'),
-       'REG_NUM'=> $request->get('REG_NUM'),
-      ]);
-       $ville->save();
-      return redirect('/creerville')->with('success', 'Stock has been added');
+       try { 
+        $input = $request->all();   
+        $ville = Ville::create($input);        
+       if ($request->ajax() || $request->is('api/*')) {
+           return response()->json(['success'=>'Got Simple Ajax Request.']);            
+       } else {            
+           $request->session()->flash('success', 'Enregistrement effectué avec succès');           
+           return redirect()->route('parametres.ville.index');
+       }
+       }catch(PDOException $exception) {
+//            DB::rollBack();
+           if ($request->ajax()) {
+               return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+           } else {
+               return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+           }
+       }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function show()
-    {
-        //
+    public function update(Request $request)
+    {   
+      try { 
+            $input = $request->all();             
+            $ville = Ville::findOrFail($input["VIL_NUM"]);
+            $input = $request->all();
+            $ville->fill($input);
+            $ville->update();                
+            $request->session()->flash('success', 'Modification effectué avec succès');           
+            return redirect()->route('parametres.ville.index');
+       
+        }catch(PDOException $exception) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+            } else {
+                return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+            }
+        }
+       
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function afficherville($VIL_NUM)
-    {
-         $ville= Ville::find($VIL_NUM);
-         $region=Region::all();
-        return view('Ville.afficherville', ['ville'=>$ville, 'region'=>$region,]);
+    public function delete($id)
+    { 
+        $ville = Ville::findOrFail($id); 
+        $ville->delete();
+        //dd($categorie);     
+       // $request->session()->flash('success', 'Modification effectué avec succès');           
+        return redirect()->route('parametres.ville.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function updateville(Request $request, $VIL_NUM )
-    {
-        $request->validate([
-        'VIL_NOM'=>'required',
-        'VIL_DESCR'=> 'required',
-        'REG_NUM' => 'required',
-    ]);
-
-      $ville = Ville::find($VIL_NUM);
-      $ville->VIL_NOM = $request->get('VIL_NOM');
-      $ville->VIL_DESCR = $request->get('VIL_DESCR');
-      $ville->REG_NUM= $request->get('REG_NUM');
-      $ville->save();
-
-      return redirect('/indexville')->with('success', 'Stock has been ');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function destroyville($VIL_NUM)
-    {
-        $ville = Ville::find($VIL_NUM);
-     $ville->delete();
-
-     return redirect('/indexville')->with('success', 'Stock has been deleted Successfully');
+    public function deletes(Request $request)
+    {   //dd($request);
+        $input = $request->all(); 
+        $d = $input["d"];
+        //dd($d);
+        if(!empty($d)) {
+            foreach ($d as $id) {
+                $ville = Ville::findOrFail($id); 
+                $ville->delete();
+            }
+        }                  
+        return redirect()->route('parametres.ville.index');
     }
 }

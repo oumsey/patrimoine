@@ -1,4 +1,3 @@
-
 <?php
 
 namespace App\Model;
@@ -27,7 +26,7 @@ class Natureprojet extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-    //NATURE PROJET  EST ENFANT DE PERIODE DE TYPE PROJET
+    //NATURE PROJET  EST ENFANT DE TYPE PROJET
 
     public function typeprojet()
     {

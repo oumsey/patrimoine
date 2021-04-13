@@ -5,23 +5,25 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Model\Quartier;
 use App\Model\Commune;
+use App\Http\Controllers\PDOException;
 
 class QuartierController extends Controller
 {
-    /**
+      /**
      * Display a listing of the resource.
      *
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function indexquartier()
+    public function index()
     {
-        $quartier=Quartier::all();
-        foreach ($quartier as $r) {
-            $r->commune=Commune::find($r->COM_NUM);
-            //dd($r);
-        }
-        return view('Quartier.indexquartier', compact('quartier'));
+       $quartiers = Quartier::all();
+       //dd($agenceb);
+       foreach ($quartiers as $r) {
+           $r->commune=Commune::find($r->COM_NUM);
+       }
+    //dd($agenceb);
+       return view('parametres.quartier.index', compact('quartiers'));
     }
 
     /**
@@ -30,10 +32,19 @@ class QuartierController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function creerquartier()
+    public function create()
     {
         $commune=Commune::all();
-        return view('Quartier.creerquartier', compact('commune'));
+        return view('parametres.quartier.create')->with('commune', $commune);
+    }
+
+    public function edit($id)
+    { 
+        $quartier = Quartier::findOrFail($id);
+         $commune=Commune::all(); 
+       // dd($categorie);     
+        return view('parametres.quartier.create')->with('quartier', $quartier)
+                                                       ->with('commune', $commune);
     }
 
     /**
@@ -43,85 +54,69 @@ class QuartierController extends Controller
      * @param  \App\lain  $lain
      * @return \Illuminate\Http\Response
      */
-    public function storequartier(Request $request)
+    public function store(Request $request)
     {
-        $request->validate([
-        'QRT_NOM'=>'required',
-        'QRT_DESCR'=> 'required',
-        'COM_NUM' => 'required'
-     ]);
-      $quartier=new Quartier([
-       'QRT_NOM' => $request->get('QRT_NOM'),
-       'QRT_DESCR'=> $request->get('QRT_DESCR'),
-       'COM_NUM'=> $request->get('COM_NUM'),
-      ]);
-       $quartier->save();
-      return redirect('/creerquartier')->with('success', 'Stock has been added');
+       try { 
+        $input = $request->all();   
+        $quartier = Quartier::create($input);        
+       if ($request->ajax() || $request->is('api/*')) {
+           return response()->json(['success'=>'Got Simple Ajax Request.']);            
+       } else {            
+           $request->session()->flash('success', 'Enregistrement effectué avec succès');           
+           return redirect()->route('parametres.quartier.index');
+       }
+       }catch(PDOException $exception) {
+//            DB::rollBack();
+           if ($request->ajax()) {
+               return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+           } else {
+               return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+           }
+       }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function show()
-    {
-        //
+    public function update(Request $request)
+    {   
+      try { 
+            $input = $request->all(); 
+            //dd($input);            
+            $quartier = Quartier::findOrFail($input["QRT_NUM"]);
+            $input = $request->all();
+            $quartier->fill($input);
+            $quartier->update();                
+            $request->session()->flash('success', 'Modification effectué avec succès');           
+            return redirect()->route('parametres.quartier.index');
+       
+        }catch(PDOException $exception) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'refresh' => false, 'message' => "Erreur lors du traitement de la requête sur le serveur."]);
+            } else {
+                return redirect()->back()->with('error', "Erreur lors du traitement de la requête sur le serveur.");
+            }
+        }
+       
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function afficherquartier($QRT_NUM)
-    {
-         $quartier= Quartier::find($QRT_NUM);
-         $commune=Commune::all();
-        return view('Quartier.afficherquartier', ['quartier'=>$quartier, 'commune'=>$commune,]);
+    public function delete($id)
+    { 
+        $quartier = Quartier::findOrFail($id); 
+        $quartier->delete();
+        //dd($categorie);     
+       // $request->session()->flash('success', 'Modification effectué avec succès');           
+        return redirect()->route('parametres.quartier.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function updatequartier(Request $request, $QRT_NUM )
-    {
-        $request->validate([
-        'QRT_NOM'=>'required',
-        'QRT_DESCR'=> 'required',
-        'COM_NUM' => 'required',
-    ]);
-
-      $quartier = Quartier::find($QRT_NUM);
-      $quartier->QRT_NOM = $request->get('QRT_NOM');
-      $quartier->QRT_DESCR = $request->get('QRT_DESCR');
-      $quartier->COM_NUM= $request->get('COM_NUM');
-      $quartier->save();
-
-      return redirect('/indexquartier')->with('success', 'Stock has been ');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function destroyquartier($QRT_NUM)
-    {
-        $quartier = Quartier::find($QRT_NUM);
-     $quartier->delete();
-
-     return redirect('/indexquartier')->with('success', 'Stock has been deleted Successfully');
+    public function deletes(Request $request)
+    {   //dd($request);
+        $input = $request->all(); 
+        $d = $input["d"];
+        //dd($d);
+        if(!empty($d)) {
+            foreach ($d as $id) {
+                $quartier = Quartier::findOrFail($id); 
+                $quartier->delete();
+            }
+        }                  
+        return redirect()->route('parametres.quartier.index');
     }
 }

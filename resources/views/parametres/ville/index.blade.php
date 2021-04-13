@@ -7,12 +7,12 @@
                         <div class="row align-items-center ">
                             <div class="col-md-8">
                                 <div class="page-title-box">
-                                    <h4 class="page-title">Liste des types de projets</h4>
+                                    <h4 class="page-title">Liste des Villes</h4>
                                     <ol class="breadcrumb">                                        
                                         <li class="breadcrumb-item">
                                             <a href="javascript:void(0);">Paramètres</a>
                                         </li>
-                                        <li class="breadcrumb-item active">Liste des types de projets</li>
+                                        <li class="breadcrumb-item active">Liste des Villes</li>
                                     </ol>
                                 </div>
                             </div>
@@ -23,7 +23,7 @@
                                             <p class="text-muted">A warning message, with a function attached to the "Confirm"-button...</p>
                                             <button type="button" class="btn btn-primary waves-effect waves-light" id="sa-params">Click me</button>
                                         </div> -->
-                                <a href="{{ url('/typeprojet/create') }}" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-container="modal-container" >Ajouter un type de projet</a>
+                                <a href="{{ url('/ville/create') }}" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-container="modal-container" >Ajouter une Ville</a>
                                     <!-- <input type="text" class="form-control" data-date-format="MM dd, yyyy" readonly="readonly" id="datepicker">data-target="#myModal"
                                     <i class="mdi mdi-chevron-down mdi-drop"></i> -->
                                 </div>
@@ -46,20 +46,22 @@
                                             <tr>
                                                 <th><input type="checkbox" id="select_all" /></th>
                                                 <th>Code</th>
-                                                <th>Libellé</th>
+                                                <th>Ville</th>
+                                                <th>Région</th>
                                                 <th class="text-center">Actions</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
-                                        <?php foreach ($typeprojets as $typepro) : ?>
-                                            <tr><td><input class="my_checkbox" type="checkbox" name="check[]" id="<?php echo $typepro->TPJ_NUM ?>" > </td>
-                                                <td>{{$typepro->TPJ_NUM}}</td>
-                                                <td>{{$typepro->TPJ_LIB}}</td>  
-                                                <td><a href="<?php echo url("typeprojet/$typepro->TPJ_NUM/edit") ?>"  data-toggle="modal" data-container="modal-container"  class="waves-effect waves-light"><i class="typcn typcn-pencil text-success"></i></a>
+                                        <?php foreach ($villes as $vil) : ?>
+                                            <tr><td><input class="my_checkbox" type="checkbox" name="check[]" id="<?php echo $vil->VIL_NUM ?>" > </td>
+                                                <td>{{$vil->VIL_NUM}}</td>
+                                                <td>{{$vil->VIL_NOM}}</td>
+                                                <td>{{$vil->region->REG_NOM}}</td>  
+                                                <td><a href="<?php echo url("ville/$vil->VIL_NUM/edit") ?>"  data-toggle="modal" data-container="modal-container"  class="waves-effect waves-light"><i class="typcn typcn-pencil text-success"></i></a>
                                                 &nbsp;  | &nbsp;
                                                 <a href ="#" data-toggle="tooltip" title="Supprimer!"
-                                                                        onclick="deleteItem('<?= $typepro->TPJ_NUM ?>','<?= url("/typeprojet/delete/$typepro->TPJ_NUM") ?>','<?= url("/typeprojet") ?>')">
+                                                                        onclick="deleteItem('<?= $vil->VIL_NUM ?>','<?= url("/ville/delete/$vil->VIL_NUM") ?>','<?= url("/ville") ?>')">
                                                     <i class="typcn typcn-trash text-danger "></i>
                                                 </a>
                                             </td>                                             
@@ -69,7 +71,7 @@
                                         <tfooter>
                                             <tr >
                                                 <th colspan="5">
-                                                    <button type="button" onclick="deleteItems('<?= url("/typeprojet/deletes") ?>', '<?= url("/typeprojet") ?>')" class="btn btn-danger btn-icon btn-rounded" id="btn_delete_all">
+                                                    <button type="button" onclick="deleteItems('<?= url("/ville/deletes") ?>', '<?= url("/ville") ?>')" class="btn btn-danger btn-icon btn-rounded" id="btn_delete_all">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
                                                 </th>

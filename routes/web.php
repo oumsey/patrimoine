@@ -116,3 +116,66 @@ Route::get('/region/{id}/edit', ['uses' => 'RegionController@edit', 'as' => 'par
 Route::get('/region/delete/{id}', ['uses' => 'RegionController@delete', 'as' => 'parametres.region.delete']);
 Route::get('/region/deletes', ['uses' => 'RegionController@deletes', 'as' => 'parametres.region.deletes']);
 Route::post('/region/update', ['uses' => 'RegionController@update', 'as' => 'parametres.region.update']);
+
+//Nature projet
+Route::get('/natureprojet', ['uses' => 'NatureprojetController@index', 'as' => 'parametres.natureprojet.index']);//la 3 partie represente la vue qu'on va utiliser
+Route::get('/natureprojet/create', ['uses' => 'NatureprojetController@create', 'as' => 'parametres.natureprojet.create']);
+Route::post('/natureprojet/store', ['uses' => 'NatureprojetController@store', 'as' => 'parametres.natureprojet.store']);
+Route::get('/natureprojet/{id}/edit', ['uses' => 'NatureprojetController@edit', 'as' => 'parametres.natureprojet.create']);
+Route::get('/natureprojet/delete/{id}', ['uses' => 'NatureprojetController@delete', 'as' => 'parametres.natureprojet.delete']);
+Route::get('/natureprojet/deletes', ['uses' => 'NatureprojetController@deletes', 'as' => 'parametres.natureprojet.deletes']);
+Route::post('/natureprojet/update', ['uses' => 'NatureprojetController@update', 'as' => 'parametres.natureprojet.update']);
+
+//Ville
+Route::get('/ville', ['uses' => 'VilleController@index', 'as' => 'parametres.ville.index']);//la 3 partie represente la vue qu'on va utiliser
+Route::get('/ville/create', ['uses' => 'VilleController@create', 'as' => 'parametres.ville.create']);
+Route::post('/ville/store', ['uses' => 'VilleController@store', 'as' => 'parametres.ville.store']);
+Route::get('/ville/{id}/edit', ['uses' => 'VilleController@edit', 'as' => 'parametres.ville.create']);
+Route::get('/ville/delete/{id}', ['uses' => 'VilleController@delete', 'as' => 'parametres.ville.delete']);
+Route::get('/ville/deletes', ['uses' => 'VilleController@deletes', 'as' => 'parametres.ville.deletes']);
+Route::post('/ville/update', ['uses' => 'VilleController@update', 'as' => 'parametres.ville.update']);
+
+//Commune
+Route::get('/commune', ['uses' => 'CommuneController@index', 'as' => 'parametres.commune.index']);//la 3 partie represente la vue qu'on va utiliser
+Route::get('/commune/create', ['uses' => 'CommuneController@create', 'as' => 'parametres.commune.create']);
+Route::post('/commune/store', ['uses' => 'CommuneController@store', 'as' => 'parametres.commune.store']);
+Route::get('/commune/{id}/edit', ['uses' => 'CommuneController@edit', 'as' => 'parametres.commune.create']);
+Route::get('/commune/delete/{id}', ['uses' => 'CommuneController@delete', 'as' => 'parametres.commune.delete']);
+Route::get('/commune/deletes', ['uses' => 'CommuneController@deletes', 'as' => 'parametres.commune.deletes']);
+Route::post('/commune/update', ['uses' => 'CommuneController@update', 'as' => 'parametres.commune.update']);
+
+//Quartier
+Route::get('/quartier', ['uses' => 'QuartierController@index', 'as' => 'parametres.quartier.index']);//la 3 partie represente la vue qu'on va utiliser
+Route::get('/quartier/create', ['uses' => 'QuartierController@create', 'as' => 'parametres.quartier.create']);
+Route::post('/quartier/store', ['uses' => 'QuartierController@store', 'as' => 'parametres.quartier.store']);
+Route::get('/quartier/{id}/edit', ['uses' => 'QuartierController@edit', 'as' => 'parametres.quartier.create']);
+Route::get('/quartier/delete/{id}', ['uses' => 'QuartierController@delete', 'as' => 'parametres.quartier.delete']);
+Route::get('/quartier/deletes', ['uses' => 'QuartierController@deletes', 'as' => 'parametres.quartier.deletes']);
+Route::post('/quartier/update', ['uses' => 'QuartierController@update', 'as' => 'parametres.quartier.update']);
+
+//PHASE
+Route::get('/phase', ['uses' => 'PhaseController@index', 'as' => 'parametres.phase.index']);//la 3 partie represente la vue qu'on va utiliser
+Route::get('/phase/create', ['uses' => 'PhaseController@create', 'as' => 'parametres.phase.create']);
+Route::post('/phase/store', ['uses' => 'PhaseController@store', 'as' => 'parametres.phase.store']);
+Route::get('/phase/{id}/edit', ['uses' => 'PhaseController@edit', 'as' => 'parametres.phase.create']);
+Route::get('/phase/delete/{id}', ['uses' => 'PhaseController@delete', 'as' => 'parametres.phase.delete']);
+Route::get('/phase/deletes', ['uses' => 'PhaseController@deletes', 'as' => 'parametres.phase.deletes']);
+Route::post('/phase/update', ['uses' => 'PhaseController@update', 'as' => 'parametres.phase.update']);
+
+//Rubrique
+Route::get('/rubrique', ['uses' => 'RubriqueController@index', 'as' => 'parametres.rubrique.index']);//la 3 partie represente la vue qu'on va utiliser
+Route::get('/rubrique/create', ['uses' => 'RubriqueController@create', 'as' => 'parametres.rubrique.create']);
+Route::post('/rubrique/store', ['uses' => 'RubriqueController@store', 'as' => 'parametres.rubrique.store']);
+Route::get('/rubrique/{id}/edit', ['uses' => 'RubriqueController@edit', 'as' => 'parametres.rubrique.create']);
+Route::get('/rubrique/delete/{id}', ['uses' => 'RubriqueController@delete', 'as' => 'parametres.rubrique.delete']);
+Route::get('/rubrique/deletes', ['uses' => 'RubriqueController@deletes', 'as' => 'parametres.rubrique.deletes']);
+Route::post('/rubrique/update', ['uses' => 'RubriqueController@update', 'as' => 'parametres.rubrique.update']);
+
+//Sousrubrique
+Route::get('/sousrubrique', ['uses' => 'SousrubriqueController@index', 'as' => 'parametres.sousrubrique.index']);//la 3 partie represente la vue qu'on va utiliser
+Route::get('/sousrubrique/create', ['uses' => 'SousrubriqueController@create', 'as' => 'parametres.sousrubrique.create']);
+Route::post('/sousrubrique/store', ['uses' => 'SousrubriqueController@store', 'as' => 'parametres.sousrubrique.store']);
+Route::get('/sousrubrique/{id}/edit', ['uses' => 'SousrubriqueController@edit', 'as' => 'parametres.sousrubrique.create']);
+Route::get('/sousrubrique/delete/{id}', ['uses' => 'SousrubriqueController@delete', 'as' => 'parametres.sousrubrique.delete']);
+Route::get('/sousrubrique/deletes', ['uses' => 'SousrubriqueController@deletes', 'as' => 'parametres.sousrubrique.deletes']);
+Route::post('/sousrubrique/update', ['uses' => 'SousrubriqueController@update', 'as' => 'parametres.sousrubrique.update']);

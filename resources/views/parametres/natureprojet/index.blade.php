@@ -7,12 +7,12 @@
                         <div class="row align-items-center ">
                             <div class="col-md-8">
                                 <div class="page-title-box">
-                                    <h4 class="page-title">Liste des types de projets</h4>
+                                    <h4 class="page-title">Liste des Natures de projets</h4>
                                     <ol class="breadcrumb">                                        
                                         <li class="breadcrumb-item">
                                             <a href="javascript:void(0);">Paramètres</a>
                                         </li>
-                                        <li class="breadcrumb-item active">Liste des types de projets</li>
+                                        <li class="breadcrumb-item active">Liste des Natures de projets</li>
                                     </ol>
                                 </div>
                             </div>
@@ -23,7 +23,7 @@
                                             <p class="text-muted">A warning message, with a function attached to the "Confirm"-button...</p>
                                             <button type="button" class="btn btn-primary waves-effect waves-light" id="sa-params">Click me</button>
                                         </div> -->
-                                <a href="{{ url('/typeprojet/create') }}" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-container="modal-container" >Ajouter un type de projet</a>
+                                <a href="{{ url('/natureprojet/create') }}" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-container="modal-container" >Ajouter une Nature de projet</a>
                                     <!-- <input type="text" class="form-control" data-date-format="MM dd, yyyy" readonly="readonly" id="datepicker">data-target="#myModal"
                                     <i class="mdi mdi-chevron-down mdi-drop"></i> -->
                                 </div>
@@ -52,14 +52,15 @@
                                         </thead>
 
                                         <tbody>
-                                        <?php foreach ($typeprojets as $typepro) : ?>
-                                            <tr><td><input class="my_checkbox" type="checkbox" name="check[]" id="<?php echo $typepro->TPJ_NUM ?>" > </td>
-                                                <td>{{$typepro->TPJ_NUM}}</td>
-                                                <td>{{$typepro->TPJ_LIB}}</td>  
-                                                <td><a href="<?php echo url("typeprojet/$typepro->TPJ_NUM/edit") ?>"  data-toggle="modal" data-container="modal-container"  class="waves-effect waves-light"><i class="typcn typcn-pencil text-success"></i></a>
+                                        <?php foreach ($natureprojets as $nat) : ?>
+                                            <tr><td><input class="my_checkbox" type="checkbox" name="check[]" id="<?php echo $nat->NPJ_NUM ?>" > </td>
+                                                <td>{{$nat->NPJ_NUM}}</td>
+                                                <td>{{$nat->NPJ_LIB}}</td>
+                                                <td>{{$nat->typeprojet->TPJ_LIB}}</td>  
+                                                <td><a href="<?php echo url("natureprojet/$nat->NPJ_NUM/edit") ?>"  data-toggle="modal" data-container="modal-container"  class="waves-effect waves-light"><i class="typcn typcn-pencil text-success"></i></a>
                                                 &nbsp;  | &nbsp;
                                                 <a href ="#" data-toggle="tooltip" title="Supprimer!"
-                                                                        onclick="deleteItem('<?= $typepro->TPJ_NUM ?>','<?= url("/typeprojet/delete/$typepro->TPJ_NUM") ?>','<?= url("/typeprojet") ?>')">
+                                                                        onclick="deleteItem('<?= $nat->NPJ_NUM ?>','<?= url("/natureprojet/delete/$nat->NPJ_NUM") ?>','<?= url("/natureprojet") ?>')">
                                                     <i class="typcn typcn-trash text-danger "></i>
                                                 </a>
                                             </td>                                             
@@ -69,7 +70,7 @@
                                         <tfooter>
                                             <tr >
                                                 <th colspan="5">
-                                                    <button type="button" onclick="deleteItems('<?= url("/typeprojet/deletes") ?>', '<?= url("/typeprojet") ?>')" class="btn btn-danger btn-icon btn-rounded" id="btn_delete_all">
+                                                    <button type="button" onclick="deleteItems('<?= url("/natureprojet/deletes") ?>', '<?= url("/natureprojet") ?>')" class="btn btn-danger btn-icon btn-rounded" id="btn_delete_all">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
                                                 </th>
